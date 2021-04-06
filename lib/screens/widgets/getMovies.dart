@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:themoviedb/class/Movies.dart';
 
 Widget popular() {
-  Movies().popular();
-  return Column(
-    children: [Text('peliculas populares')],
+  // return Text('hey bro');
+  return FutureBuilder<Widget>(
+    future: Movies().getMovies(url: 'popular'),
+    builder: (context, snapshot) => snapshot.hasData
+        ? snapshot.data
+        : Center(child: CircularProgressIndicator()),
   );
 }
 

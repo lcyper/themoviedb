@@ -1,0 +1,90 @@
+
+
+// datos generales cuando vienen x pagina
+// https://api.themoviedb.org/3/movie/popular?api_key=0e685fd77fb3d76874a3ac26e0db8a4b&language=es
+{
+    "adult": false,
+    "backdrop_path": "/jMWkd0fuwbG39eJpzycJzPWMCww.jpg",
+    "genre_ids": [
+        28,
+        878
+    ],
+    "id": 399566,
+    "original_language": "en",
+    "original_title": "Godzilla vs. Kong",
+    "overview": "Godzilla y Kong, dos de las fuerzas más poderosas de un planeta habitado por todo tipo de aterradoras criaturas, se enfrentan en un espectacular combate que sacude los cimientos de la humanidad. Monarch (Kyle Chandler) se embarca en una misión de alto riesgo y pone rumbo hacia territorios inexplorados para descubrir los orígenes de estos dos titanes, en un último esfuerzo por tratar de salvar a dos bestias que parecen tener las horas contadas sobre la faz de la Tierra.",
+    "popularity": 15798.548,
+    "poster_path": "/bnuC6hu7AB5dYW26A3o6NNLlIlE.jpg",
+    "release_date": "2021-03-24",
+    "title": "Godzilla vs Kong",
+    "video": false,
+    "vote_average": 8.5,
+    "vote_count": 3574
+},
+// datos q vienen de la pelicula x ID
+// https://api.themoviedb.org/3/movie/399566?api_key=0e685fd77fb3d76874a3ac26e0db8a4b&language=es
+{
+    "adult": false,
+    "backdrop_path": "/jMWkd0fuwbG39eJpzycJzPWMCww.jpg",
+    "belongs_to_collection": {
+        "id": 535313,
+        "name": "Godzilla - Colección",
+        "poster_path": "/inNN466SKHNjbGmpfhfsaPQNleS.jpg",
+        "backdrop_path": "/oboBn4VYB79uDxnyIri0Nt3U3N2.jpg"
+    },
+    "budget": 200000000,
+    "genres": [
+        {
+            "id": 28,
+            "name": "Acción"
+        },
+        {
+            "id": 878,
+            "name": "Ciencia ficción"
+        }
+    ],
+    "homepage": "https://www.godzillavskong.net",
+    "id": 399566,
+    "imdb_id": "tt5034838",
+    "original_language": "en",
+    "original_title": "Godzilla vs. Kong",
+    "overview": "Godzilla y Kong, dos de las fuerzas más poderosas de un planeta habitado por todo tipo de aterradoras criaturas, se enfrentan en un espectacular combate que sacude los cimientos de la humanidad. Monarch (Kyle Chandler) se embarca en una misión de alto riesgo y pone rumbo hacia territorios inexplorados para descubrir los orígenes de estos dos titanes, en un último esfuerzo por tratar de salvar a dos bestias que parecen tener las horas contadas sobre la faz de la Tierra.",
+    "popularity": 15798.548,
+    "poster_path": "/bnuC6hu7AB5dYW26A3o6NNLlIlE.jpg",
+    "production_companies": [
+        {
+            "id": 174,
+            "logo_path": "/ky0xOc5OrhzkZ1N6KyUxacfQsCk.png",
+            "name": "Warner Bros. Pictures",
+            "origin_country": "US"
+        },
+        {
+            "id": 923,
+            "logo_path": "/5UQsZrfbfG2dYJbx8DxfoTr2Bvu.png",
+            "name": "Legendary Pictures",
+            "origin_country": "US"
+        }
+    ],
+    "production_countries": [
+        {
+            "iso_3166_1": "US",
+            "name": "United States of America"
+        }
+    ],
+    "release_date": "2021-03-24",
+    "revenue": 285400000,
+    "runtime": 113,
+    "spoken_languages": [
+        {
+            "english_name": "English",
+            "iso_639_1": "en",
+            "name": "English"
+        }
+    ],
+    "status": "Released",
+    "tagline": "Sólo uno caerá.",
+    "title": "Godzilla vs Kong",
+    "video": false,
+    "vote_average": 8.5,
+    "vote_count": 3641
+}

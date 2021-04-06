@@ -15,29 +15,28 @@ class _MoviesTabState extends State<MoviesTab> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
           children: [
-            FlatButton(
+            TextButton(
               onPressed: () {
                 setState(() {
                   tabSelected = popular();
                 });
               },
-              color: Colors.white,
               child: Text(
                 'Populares',
-                style: TextStyle(fontWeight: FontWeight.w900),
+                style: _textStyleLabels,
               ),
             ),
-            FlatButton(
+            TextButton(
               onPressed: () {
                 setState(() {
                   tabSelected = mostView();
                 });
               },
-              color: Colors.white,
               child: Text(
                 'Mas Vistas',
-                style: TextStyle(fontWeight: FontWeight.w900),
+                style: _textStyleLabels,
               ),
             ),
           ],
@@ -46,4 +45,14 @@ class _MoviesTabState extends State<MoviesTab> {
       body: tabSelected,
     );
   }
+
+  TextStyle _textStyleLabels = TextStyle(
+    fontWeight: FontWeight.w900,
+    color: Colors.black,
+    fontStyle: FontStyle.italic,
+    fontSize: 15.0,
+    decoration: TextDecoration.underline,
+    decorationColor: Colors.yellow,
+    decorationThickness: 2.0,
+  );
 }
