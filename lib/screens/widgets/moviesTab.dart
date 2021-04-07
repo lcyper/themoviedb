@@ -35,7 +35,7 @@ class _MoviesTabState extends State<MoviesTab> {
                 });
               },
               child: Text(
-                'Mas Vistas',
+                'Mejor Puntuadas',
                 style: _textStyleLabels,
               ),
             ),

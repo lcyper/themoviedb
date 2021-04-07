@@ -5,10 +5,10 @@ proyecto nivelador de curso de flutter
 
 tareas:
 #home
-    #populares
-        -traer datos y mostrarlos
     #mas vistas
         -traer datos y mostrarlos
+
+#para traer a los actores /movie/{movie_id}/credits
 
 #pagina detalle
 -genero

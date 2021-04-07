@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:themoviedb/helpers/bordered_text.dart';
+import 'package:themoviedb/helpers/shared_preferences.dart';
 
 // 'https://api.themoviedb.org/3/movie/550?api_key=0e685fd77fb3d76874a3ac26e0db8a4b';
 const String baseUrl = 'https://api.themoviedb.org/3/movie/';
 const String apiKey = '0e685fd77fb3d76874a3ac26e0db8a4b';
 // https://api.themoviedb.org/3/movie/popular?api_key=0e685fd77fb3d76874a3ac26e0db8a4b&language=es
+const String baseUrlImage =
+    'https://www.themoviedb.org/t/p/w600_and_h900_bestv2';
+
+final Map dataApi = {}; //aca se almacena el cache de peliculas
 
 class Movies {
   final String title;
@@ -14,19 +20,21 @@ class Movies {
   final String picture;
   final String voteAverage;
 
-  Movies(
-      {this.title,
-      this.description,
-      this.gender,
-      this.picture,
-      this.voteAverage});
+  Movies({
+    this.title,
+    this.description,
+    this.gender,
+    this.picture,
+    this.voteAverage,
+  });
+
+  // _pref()async => await SharedPreferences preferences;
 
   factory Movies.fromJson(Map json) {
     String title = json['title'] ?? json['original_title'];
     String description = json['overview'];
     List gender = json['genre_ids'];
-    String picture = 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2' +
-        json['poster_path'];
+    String picture = baseUrlImage + json['poster_path'];
     String voteAverage = json['vote_average'].toString();
     return Movies(
       title: title,
@@ -39,7 +47,13 @@ class Movies {
 
   // clase de llamada principal, maneja todo.
   Future<Widget> getMovies({int page = 1, String url = 'popular'}) async {
-    Map data = await makeRequest(page: 1, url: 'popular');
+    Map data;
+    if (dataApi[url] == null) {
+      data = await makeRequest(page: page, url: url);
+      dataApi[url] = data;
+    } else {
+      data = dataApi[url];
+    }
     return createListView(data);
   }
 }
@@ -89,60 +103,61 @@ Widget createCard(Movies movie) {
         Radius.circular(8.0),
       ),
     ),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        ListTile(
-          leading: SizedBox(
-            child: Image.network(
-              movie.picture,
-              // width: double.infinity,
-            ),
-            width: 100.0,
-          ),
-          title: Row(
-            children: [
-              Text(
-                movie.title,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.0,
-                ),
-              ),
-              Spacer(),
-              BorderedText(
-                strokeWidth: 3.0,
-                strokeColor: Colors.black,
-                child: Text(
-                  movie.voteAverage,
+    // color: Colors.yellowAccent,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      // mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Image.network(
+          movie.picture,
+          alignment: Alignment.topLeft,
+          width: 80.0,
+          cacheHeight: 100,
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          // mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Row(
+              // crossAxisAlignment: CrossAxisAlignment.stretch,
+              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  movie.title,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: Colors.yellow,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                    color: Colors.black,
                   ),
                 ),
-              ),
-              // (
-              //   movie.voteAverage,
-              //   // textAlign: TextAlign.end,
-              //   style: TextStyle(
-              //     color: Colors.yellow,
-              //     decorationThickness: 3.0,
-              //     decorationColor: Colors.black,
-              //     decorationStyle: TextDecorationStyle.wavy,
-              //   ),),
-            ],
-          ),
-          // subtitle: Text(movie.description),
+                // Spacer(),
+                BorderedText(
+                  strokeWidth: 3.0,
+                  strokeColor: Colors.black,
+                  child: Text(
+                    movie.voteAverage,
+                    style: TextStyle(
+                      color: Colors.yellow,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.start,
+            //   crossAxisAlignment: CrossAxisAlignment.end,
+            //   children: movie.gender
+            //       .map((gender) => SizedBox(
+            //             child: Text(gender.toString()),
+            //             width: 50.0,
+            //           ))
+            //       .toList(),
+            // ),
+          ],
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: movie.gender
-              .map((gender) => SizedBox(
-                    child: Text(gender.toString()),
-                    width: 50.0,
-                  ))
-              .toList(),
-        ),
+        // subtitle: Text(movie.description),
       ],
     ),
   );
