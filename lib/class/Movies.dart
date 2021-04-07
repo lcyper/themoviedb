@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:themoviedb/helpers/bordered_text.dart';
 import 'package:themoviedb/helpers/shared_preferences.dart';
+import 'package:themoviedb/screens/widgets/createCard.dart';
 
 // 'https://api.themoviedb.org/3/movie/550?api_key=0e685fd77fb3d76874a3ac26e0db8a4b';
 const String baseUrl = 'https://api.themoviedb.org/3/movie/';
@@ -11,7 +11,7 @@ const String apiKey = '0e685fd77fb3d76874a3ac26e0db8a4b';
 const String baseUrlImage =
     'https://www.themoviedb.org/t/p/w600_and_h900_bestv2';
 
-final Map dataApi = {}; //aca se almacena el cache de peliculas
+final Map cacheDataApi = {}; //aca se almacena el cache de peliculas
 
 class Movies {
   final String title;
@@ -46,13 +46,13 @@ class Movies {
   }
 
   // clase de llamada principal, maneja todo.
-  Future<Widget> getMovies({int page = 1, String url = 'popular'}) async {
+  Future<Widget> getMovies({int page = 1, String url}) async {
     Map data;
-    if (dataApi[url] == null) {
+    if (cacheDataApi[url] == null) {
       data = await makeRequest(page: page, url: url);
-      dataApi[url] = data;
+      cacheDataApi[url] = data;
     } else {
-      data = dataApi[url];
+      data = cacheDataApi[url];
     }
     return createListView(data);
   }
@@ -93,72 +93,5 @@ Widget createListView(Map data) {
     padding: const EdgeInsets.all(8),
     itemCount: list.length,
     itemBuilder: (context, index) => createCard(list[index]),
-  );
-}
-
-Widget createCard(Movies movie) {
-  return Card(
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(
-        Radius.circular(8.0),
-      ),
-    ),
-    // color: Colors.yellowAccent,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      // mainAxisSize: MainAxisSize.max,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Image.network(
-          movie.picture,
-          alignment: Alignment.topLeft,
-          width: 80.0,
-          cacheHeight: 100,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          // mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Row(
-              // crossAxisAlignment: CrossAxisAlignment.stretch,
-              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(
-                  movie.title,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                    color: Colors.black,
-                  ),
-                ),
-                // Spacer(),
-                BorderedText(
-                  strokeWidth: 3.0,
-                  strokeColor: Colors.black,
-                  child: Text(
-                    movie.voteAverage,
-                    style: TextStyle(
-                      color: Colors.yellow,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.start,
-            //   crossAxisAlignment: CrossAxisAlignment.end,
-            //   children: movie.gender
-            //       .map((gender) => SizedBox(
-            //             child: Text(gender.toString()),
-            //             width: 50.0,
-            //           ))
-            //       .toList(),
-            // ),
-          ],
-        ),
-        // subtitle: Text(movie.description),
-      ],
-    ),
   );
 }
