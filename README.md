@@ -1,16 +1,21 @@
-# themoviedb
+# TheMovieDb
 
-A new Flutter project.
+@myFirstApp
+
+A Flutter project to see movies info ONLY from [Themoviedb Api](www.themoviedb.org)
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Follow these steps to run your flutter app on emulator
 
-A few resources to get you started if this is your first Flutter project:
+- you wil need to configurate an emulator first (visual studio or the console)
+  flutter run lib/main.dart
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+### Follow these steps to run your flutter app on web
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. flutter channel master (navigate to master branch)
+2. flutter upgrade
+3. flutter config --enable-web
+4. flutter devices
+5. flutter create web_app
+6. flutter run -d chrome (run project on chrome)
