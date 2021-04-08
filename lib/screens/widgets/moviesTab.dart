@@ -10,39 +10,57 @@ class _MoviesTabState extends State<MoviesTab> {
   Widget tabSelected = popular();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  tabSelected = popular();
-                });
-              },
-              child: Text(
-                'Populares',
-                style: _textStyleLabels,
+    return Column(
+      children: [
+        Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Expanded(
+                flex: 5,
+                child: OutlinedButton(
+                  // focusNode: FocusNode(onKey: ),
+                  // autofocus: true,
+                  // key: Key('Populares'),
+                  style: TextButton.styleFrom(
+                      // backgroundColor: Colors.blue,
+                      ),
+                  onPressed: () {
+                    setState(() {
+                      tabSelected = popular();
+                    });
+                  },
+                  child: Text(
+                    'Populares',
+                    style: _textStyleLabels,
+                  ),
+                ),
               ),
-            ),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  tabSelected = mostView();
-                });
-              },
-              child: Text(
-                'Mejor Puntuadas',
-                style: _textStyleLabels,
+              Expanded(
+                flex: 5,
+                child: OutlinedButton(
+                  onPressed: () {
+                    setState(() {
+                      tabSelected = mostView();
+                    });
+                  },
+                  child: Text(
+                    'Mejor Puntuadas',
+                    style: _textStyleLabels,
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
+          flex: 1,
         ),
-      ),
-      body: tabSelected,
+        Expanded(
+          child: tabSelected,
+          flex: 9,
+        ),
+      ],
     );
   }
 
@@ -50,9 +68,6 @@ class _MoviesTabState extends State<MoviesTab> {
     fontWeight: FontWeight.w900,
     color: Colors.black,
     fontStyle: FontStyle.italic,
-    fontSize: 15.0,
-    decoration: TextDecoration.underline,
-    decorationColor: Colors.yellow,
-    decorationThickness: 2.0,
+    fontSize: 20.0,
   );
 }
