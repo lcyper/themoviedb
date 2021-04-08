@@ -19,6 +19,7 @@ class Movies {
   final List gender;
   final String picture;
   final String voteAverage;
+  final String id;
 
   Movies({
     this.title,
@@ -26,6 +27,7 @@ class Movies {
     this.gender,
     this.picture,
     this.voteAverage,
+    this.id,
   });
 
   // _pref()async => await SharedPreferences preferences;
@@ -36,25 +38,35 @@ class Movies {
     List gender = json['genre_ids'];
     String picture = baseUrlImage + json['poster_path'];
     String voteAverage = json['vote_average'].toString();
+    String id = json['id'].toString();
     return Movies(
       title: title,
       description: description,
       gender: gender,
       picture: picture,
       voteAverage: voteAverage,
+      id: id,
     );
   }
 
   // clase de llamada principal, maneja todo.
-  Future<Widget> getMovies({int page = 1, String url}) async {
-    Map data;
-    if (cacheDataApi[url] == null) {
-      data = await makeRequest(page: page, url: url);
-      cacheDataApi[url] = data;
+  Future<Widget> getMovies({
+    int page = 1,
+    String url,
+    String id,
+  }) async {
+    if (id == null) {
+      Map data;
+      if (cacheDataApi[url] == null) {
+        data = await makeRequest(page: page, url: url);
+        cacheDataApi[url] = data;
+      } else {
+        data = cacheDataApi[url];
+      }
+      return createListView(data);
     } else {
-      data = cacheDataApi[url];
+      return Text('movie data');
     }
-    return createListView(data);
   }
 }
 
@@ -90,8 +102,10 @@ Widget createListView(Map data) {
       data['results'].map((element) => Movies.fromJson(element)).toList();
 
   return ListView.builder(
+    // scrollDirection: Axis.vertical,
+    // shrinkWrap: true,
     padding: const EdgeInsets.all(8),
     itemCount: list.length,
-    itemBuilder: (context, index) => createCard(list[index]),
+    itemBuilder: (context, index) => CreateCard(movie: list[index]),
   );
 }
