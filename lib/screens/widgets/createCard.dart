@@ -12,124 +12,123 @@ class CreateCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-    key: Key(movie.id),
-    onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MovieCardPage(movie:movie),
+      key: Key(movie.id),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MovieCardPage(movie: movie),
+          ),
+        );
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(8.0),
+          ),
         ),
-      );
-    },
-    child: Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(8.0),
-        ),
-      ),
 
-      // color: Colors.yellowAccent,
+        // color: Colors.yellowAccent,
 
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
 
-        // mainAxisSize: MainAxisSize.max,
+          // mainAxisSize: MainAxisSize.max,
 
-        crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
 
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                15.0,
-                0.0,
-                15.0,
-                20.0,
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                child: Image.network(
-                  movie.picture,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  15.0,
+                  0.0,
+                  15.0,
+                  20.0,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  child: Image.network(
+                    movie.picture,
 
-                  alignment: Alignment.center,
+                    alignment: Alignment.center,
 
-                  // width: 80.0,
+                    // width: 80.0,
 
-                  cacheHeight: 200,
+                    cacheHeight: 200,
+                  ),
                 ),
               ),
+              flex: 3,
             ),
-            flex: 3,
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          movie.title,
-                          overflow: TextOverflow.fade,
-                          maxLines: 2,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20.0,
-                            color: Colors.black,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            movie.title,
+                            overflow: TextOverflow.fade,
+                            maxLines: 2,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.0,
+                              color: Colors.black,
+                            ),
                           ),
                         ),
-                      ),
 
-                      // Spacer(),
+                        // Spacer(),
 
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 8.0,
-                          ),
-                          child: BorderedText(
-                            strokeWidth: 2.0,
-                            strokeColor: Colors.black,
-                            child: Text(
-                              movie.voteAverage,
-                              style: TextStyle(
-                                color: Colors.yellow,
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              left: 8.0,
+                            ),
+                            child: BorderedText(
+                              strokeWidth: 2.0,
+                              strokeColor: Colors.black,
+                              child: Text(
+                                movie.voteAverage,
+                                style: TextStyle(
+                                  color: Colors.yellow,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    // mainAxisAlignment: MainAxisAlignment.start,
+                      ],
+                    ),
+                    Row(
+                      // mainAxisAlignment: MainAxisAlignment.start,
 
-                    // crossAxisAlignment: CrossAxisAlignment.end,
+                      // crossAxisAlignment: CrossAxisAlignment.end,
 
-                    children: movie.gender
-                        .map((gender) => SizedBox(
-                              child: Text(gender.toString()),
-                              width: 50.0,
-                            ))
-                        .toList(),
-                  ),
-                ],
+                      children: movie.gender
+                          .map(
+                            (gender) => Text(gender.toString() + ' / '),
+                          )
+                          .toList(),
+                    ),
+                  ],
+                ),
               ),
+
+              // subtitle: Text(movie.description),
+
+              flex: 7,
             ),
-
-            // subtitle: Text(movie.description),
-
-            flex: 7,
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }

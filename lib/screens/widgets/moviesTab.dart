@@ -25,8 +25,15 @@ class _MoviesTabState extends State<MoviesTab> {
                   // autofocus: true,
                   // key: Key('Populares'),
                   style: TextButton.styleFrom(
-                      // backgroundColor: Colors.blue,
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        color: Colors.yellow,
+                        width: 4.0,
+                        style: BorderStyle.solid,
                       ),
+                    ),
+                    // backgroundColor: Colors.blue,
+                  ),
                   onPressed: () {
                     setState(() {
                       tabSelected = popular();

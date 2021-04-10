@@ -5,7 +5,7 @@ import 'package:themoviedb/helpers/shared_preferences.dart';
 import 'package:themoviedb/screens/widgets/createCard.dart';
 
 // 'https://api.themoviedb.org/3/movie/550?api_key=0e685fd77fb3d76874a3ac26e0db8a4b';
-const String baseUrl = 'https://api.themoviedb.org/3/movie/';
+const String baseUrl = 'https://api.themoviedb.org/3/';
 const String apiKey = '0e685fd77fb3d76874a3ac26e0db8a4b';
 // https://api.themoviedb.org/3/movie/popular?api_key=0e685fd77fb3d76874a3ac26e0db8a4b&language=es
 const String baseUrlImage =
@@ -35,7 +35,7 @@ class Movies {
   factory Movies.fromJson(Map json) {
     String title = json['title'] ?? json['original_title'];
     String description = json['overview'];
-    List gender = json['genre_ids'];
+    List gender = getGenres(json['genre_ids']);
     String picture = baseUrlImage + json['poster_path'];
     String voteAverage = json['vote_average'].toString();
     String id = json['id'].toString();
@@ -50,13 +50,15 @@ class Movies {
   }
 
   // clase de llamada principal, maneja todo.
-  Future<Widget> getMovies({
-    int page = 1,
-    String url,
-    String id,
-  }) async {
+  Future<Widget> getMovies({int page = 1, String url, String id}) async {
+    // tengo q continuar con el tema de mostrar la peli x ID
     if (id == null) {
       Map data;
+      if (cacheDataApi['genres'] == null) {
+        Map genresList = await makeRequest(url: 'genre/movie/list');
+        cacheDataApi['genres'] = genresList['genres'];
+      }
+
       if (cacheDataApi[url] == null) {
         data = await makeRequest(page: page, url: url);
         cacheDataApi[url] = data;
@@ -65,7 +67,16 @@ class Movies {
       }
       return createListView(data);
     } else {
-      return Text('movie data');
+      return Center(
+        child: ListView(
+          children: [
+            Text(this.title),
+            Image.network(
+              this.picture,
+            ),
+          ],
+        ),
+      );
     }
   }
 }
@@ -74,7 +85,7 @@ class Movies {
 // Funciones de ayuda para esta clase //
 ///////////////////////////////////////
 Future<Map<String, dynamic>> makeRequest(
-    {int page = 1, String url = 'popular'}) async {
+    {int page = 1, String url, String language = 'es'}) async {
   // implementar el cache de la peticion
 
   try {
@@ -82,7 +93,7 @@ Future<Map<String, dynamic>> makeRequest(
       baseUrl + url,
       queryParameters: {
         'api_key': apiKey,
-        'language': 'es',
+        'language': language,
         'page': page,
       },
     );
@@ -93,7 +104,8 @@ Future<Map<String, dynamic>> makeRequest(
       return {'statusMessage': response.statusMessage};
     }
   } catch (e) {
-    return (e);
+    return {'statusMessage': e.response.data['statusMessage']};
+    // return (e);
   }
 }
 
@@ -108,4 +120,29 @@ Widget createListView(Map data) {
     itemCount: list.length,
     itemBuilder: (context, index) => CreateCard(movie: list[index]),
   );
+}
+
+List getGenres(List genresList) {
+  print(genresList);
+  var genresListByName;
+  genresListByName = genresList.map((id) {
+    // return id.toString();
+    return cacheDataApi['genres']
+        .where((genres) => genres['id'] == id)
+        .toList();
+    // return cacheDataApi['genres'].map((map) {
+    //   if (map['id'] == id) {
+    //     return map['name'];
+    //   }
+    // });
+  }).toList();
+
+  // genresListByName = cacheDataApi['genres'].map((map) {
+  //   if (map['id'] == id) {
+  //     return map['name'];
+  //   }
+  // });
+  // );
+  return genresListByName;
+  // return ['Accion', 'Drama'];
 }

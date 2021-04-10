@@ -10,7 +10,12 @@ class MovieCardPage extends StatelessWidget {
     // Movies().getMovies(id: movie.id, buildContext:context))
     return Scaffold(
       appBar: AppBar(),
-      body: Center(child: Text(movie.title)),
+      body: FutureBuilder(
+        future: movie.getMovies(id: movie.id),
+        builder: (context, snapshot) => snapshot.hasData
+            ? snapshot.data
+            : Center(child: CircularProgressIndicator()),
+      ),
     );
   }
 }
