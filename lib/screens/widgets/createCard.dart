@@ -114,7 +114,11 @@ class CreateCard extends StatelessWidget {
 
                       children: movie.gender
                           .map(
-                            (gender) => Text(gender.toString() + ' / '),
+                            (gender) => Text(
+                              gender.toString() + ' / ',
+                              overflow: TextOverflow.fade,
+                              softWrap: false,
+                            ),
                           )
                           .toList(),
                     ),

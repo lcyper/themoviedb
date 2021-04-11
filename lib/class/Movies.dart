@@ -56,7 +56,9 @@ class Movies {
       Map data;
       if (cacheDataApi['genres'] == null) {
         Map genresList = await makeRequest(url: 'genre/movie/list');
-        cacheDataApi['genres'] = genresList['genres'];
+        genresList = Map.fromIterable(genresList['genres'],
+            key: (e) => e['id'], value: (e) => e['name']);
+        cacheDataApi['genres'] = genresList;
       }
 
       if (cacheDataApi[url] == null) {
@@ -123,26 +125,9 @@ Widget createListView(Map data) {
 }
 
 List getGenres(List genresList) {
-  print(genresList);
-  var genresListByName;
-  genresListByName = genresList.map((id) {
-    // return id.toString();
-    return cacheDataApi['genres']
-        .where((genres) => genres['id'] == id)
-        .toList();
-    // return cacheDataApi['genres'].map((map) {
-    //   if (map['id'] == id) {
-    //     return map['name'];
-    //   }
-    // });
+  List genresListByName = genresList.map((id) {
+    return cacheDataApi['genres'][id];
   }).toList();
 
-  // genresListByName = cacheDataApi['genres'].map((map) {
-  //   if (map['id'] == id) {
-  //     return map['name'];
-  //   }
-  // });
-  // );
-  return genresListByName;
-  // return ['Accion', 'Drama'];
+  return genresListByName; // ['Accion', 'Drama'];
 }
