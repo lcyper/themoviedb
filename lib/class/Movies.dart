@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:themoviedb/helpers/helpers.dart';
 import 'package:themoviedb/helpers/shared_preferences.dart';
 import 'package:themoviedb/screens/widgets/createCard.dart';
 
@@ -56,6 +57,9 @@ class Movies {
       Map data;
       if (cacheDataApi['genres'] == null) {
         Map genresList = await makeRequest(url: 'genre/movie/list');
+        // if (genresList['hasError']) {
+        // return handleErrorWidget(genresList);
+        // }
         genresList = Map.fromIterable(genresList['genres'],
             key: (e) => e['id'], value: (e) => e['name']);
         cacheDataApi['genres'] = genresList;
@@ -106,7 +110,7 @@ Future<Map<String, dynamic>> makeRequest(
       return {'statusMessage': response.statusMessage};
     }
   } catch (e) {
-    return {'statusMessage': e.response.data['statusMessage']};
+    return {'message': e.message, 'hasError': true};
     // return (e);
   }
 }

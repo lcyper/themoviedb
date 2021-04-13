@@ -14,7 +14,10 @@ class MovieCardPage extends StatelessWidget {
         future: movie.getMovies(id: movie.id),
         builder: (context, snapshot) => snapshot.hasData
             ? snapshot.data
-            : Center(child: CircularProgressIndicator()),
+            : Center(
+                child: 
+                CircularProgressIndicator(),
+              ),
       ),
     );
   }
