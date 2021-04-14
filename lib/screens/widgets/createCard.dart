@@ -11,25 +11,22 @@ class CreateCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      key: Key(movie.id),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MovieCardPage(movie: movie),
-          ),
-        );
-      },
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(8.0),
-          ),
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(8.0),
         ),
-
-        // color: Colors.yellowAccent,
-
+      ),
+      child: InkWell(
+        key: Key(movie.id),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MovieCardPage(movie: movie),
+            ),
+          );
+        },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
 
@@ -48,20 +45,23 @@ class CreateCard extends StatelessWidget {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  child: Image.network(
-                    movie.picture,
+                  child: movie.picture != null
+                      ? Image.network(
+                          movie.picture,
 
-                    alignment: Alignment.center,
+                          alignment: Alignment.center,
 
-                    // width: 80.0,
+                          // width: 80.0,
 
-                    cacheHeight: 200,
-                  ),
+                          cacheHeight: 600,
+                        )
+                      : Icon(Icons.error_outline),
                 ),
               ),
               flex: 3,
             ),
             Expanded(
+              flex: 7,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
@@ -107,11 +107,11 @@ class CreateCard extends StatelessWidget {
                         ),
                       ],
                     ),
+                    // Spacer(),
                     Row(
-                      // mainAxisAlignment: MainAxisAlignment.start,
-
+                      mainAxisAlignment: MainAxisAlignment.start,
                       // crossAxisAlignment: CrossAxisAlignment.end,
-
+                      mainAxisSize: MainAxisSize.max,
                       children: movie.gender
                           .map(
                             (gender) => Text(
@@ -127,8 +127,6 @@ class CreateCard extends StatelessWidget {
               ),
 
               // subtitle: Text(movie.description),
-
-              flex: 7,
             ),
           ],
         ),
