@@ -37,7 +37,8 @@ class Movies {
     String title = json['title'] ?? json['original_title'];
     String description = json['overview'];
     List gender = getGenres(json['genre_ids']);
-    String picture = baseUrlImage + json['poster_path'];
+    String picture =
+        json['poster_path'] != null ? baseUrlImage + json['poster_path'] : null;
     String voteAverage = json['vote_average'].toString();
     String id = json['id'].toString();
     return Movies(
@@ -85,13 +86,30 @@ class Movies {
       );
     }
   }
+
+  Future<Widget> lookByQuerry(String inputValue) async {
+    Map data;
+    if (cacheDataApi['genres'] == null) {
+      Map genresList = await makeRequest(url: 'genre/movie/list');
+      // if (genresList['hasError']) {
+      // return handleErrorWidget(genresList);
+      // }
+      genresList = Map.fromIterable(genresList['genres'],
+          key: (e) => e['id'], value: (e) => e['name']);
+      cacheDataApi['genres'] = genresList;
+    }
+
+    data = await makeRequest(page: 1, url: 'search/movie', query: inputValue);
+    // cacheDataApi[url] = data;
+    return createListView(data);
+  }
 }
 
 /////////////////////////////////////////
 // Funciones de ayuda para esta clase //
 ///////////////////////////////////////
 Future<Map<String, dynamic>> makeRequest(
-    {int page = 1, String url, String language = 'es'}) async {
+    {int page = 1, String url, String language = 'es', String query}) async {
   // implementar el cache de la peticion
 
   try {
@@ -101,6 +119,7 @@ Future<Map<String, dynamic>> makeRequest(
         'api_key': apiKey,
         'language': language,
         'page': page,
+        'query': query,
       },
     );
     if (response.statusMessage == 'OK') {
@@ -116,6 +135,9 @@ Future<Map<String, dynamic>> makeRequest(
 }
 
 Widget createListView(Map data) {
+  if (data['results'].length == 0) {
+    return Text('No hemos encontrado lo que buscaste.');
+  }
   List list =
       data['results'].map((element) => Movies.fromJson(element)).toList();
 
