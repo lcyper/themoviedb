@@ -4,7 +4,11 @@ proyecto nivelador de curso de flutter
 (mi primera app) - 30/3/2021
 
 tareas:
-#detalle pelicula
+#detalle pelicula - armar
+
+En buscar pelis agregar icono de borrar texto - una **x** en el inputText
+
+Crear un historial de pelis buscadas, solo texto de busqueda como un autocompletado
 
 ver el schema y arreglar posibles errores donde puede q me lleguen datos con **null**
 
