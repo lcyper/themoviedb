@@ -1,5 +1,5 @@
 name: themoviedb
-description: A new Flutter project.
+description: A Flutter project.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -36,6 +36,19 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  # flutter_launcher_icons: ^0.9.0
+  # flutter_launcher_name: ^0.0.1
+
+flutter_launcher_name:
+  name: "Peliculas"
+#flutter pub run flutter_launcher_name:main
+
+flutter_icons:
+  image_path: 'assets/images/icon.png'
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  #flutter pub run flutter_launcher_icons:main
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

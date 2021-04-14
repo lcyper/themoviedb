@@ -4,9 +4,9 @@ proyecto nivelador de curso de flutter
 (mi primera app) - 30/3/2021
 
 tareas:
-#home
-    #mas vistas
-        -traer datos y mostrarlos
+#detalle pelicula
+
+ver el schema y arreglar posibles errores donde puede q me lleguen datos con **null**
 
 #para traer a los actores /movie/{movie_id}/credits
 
