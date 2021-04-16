@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:themoviedb/class/Movies.dart';
@@ -37,6 +36,7 @@ class _FindMoviesTabState extends State<FindMoviesTab> {
             ),
           ),
           FutureBuilder(
+            future: _movieList,
             builder: (context, snapshot) => snapshot.hasData
                 ? snapshot.hasError
                     ? Center(
@@ -44,7 +44,6 @@ class _FindMoviesTabState extends State<FindMoviesTab> {
                       )
                     : Expanded(child: snapshot.data)
                 : Text('las peliculas apareceran aca.'),
-            future: _movieList,
           ),
         ],
       ),

@@ -13,86 +13,87 @@ class _MoviesTabState extends State<MoviesTab> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Expanded(
-          child: SizedBox(
-            height: 20.0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Expanded(
-                  flex: 5,
-                  child: DecoratedBox(
-                    position: DecorationPosition.foreground,
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: Colors.yellow,
-                          width: tabIndex == 0 ? 5.0 : 0,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                    ),
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor:
-                            tabIndex == 0 ? Colors.white : Colors.grey[200],
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          tabIndex = 0;
-                          tabSelected = popular();
-                        });
-                      },
-                      child: Text(
-                        'Populares',
-                        style: _textStyleLabels,
+        SizedBox(
+          height: 50.0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Expanded(
+                flex: 5,
+                child: DecoratedBox(
+                  position: DecorationPosition.foreground,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Colors.yellow,
+                        width: tabIndex == 0 ? 5.0 : 0,
+                        style: tabIndex == 0
+                            ? BorderStyle.solid
+                            : BorderStyle.none,
                       ),
                     ),
                   ),
-                ),
-                Expanded(
-                  flex: 5,
-                  child: DecoratedBox(
-                    position: DecorationPosition.foreground,
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: Colors.yellow,
-                          width: tabIndex == 1 ? 5.0 : 0,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor:
+                          tabIndex == 0 ? Colors.white : Colors.grey[200],
                     ),
-                    child: TextButton(
-                      onPressed: () {
-                        setState(() {
-                          tabIndex = 1;
-                          tabSelected = mostView();
-                        });
-                      },
-                      style: TextButton.styleFrom(
-                        backgroundColor:
-                            tabIndex == 1 ? Colors.white : Colors.grey[200],
-                      ),
-                      child: Text(
-                        'Mejor Puntuadas',
-                        style: _textStyleLabels,
-                      ),
+                    onPressed: () {
+                      setState(() {
+                        tabIndex = 0;
+                        tabSelected = popular();
+                      });
+                    },
+                    child: Text(
+                      'Populares',
+                      style: _textStyleLabels,
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+              Expanded(
+                flex: 5,
+                child: DecoratedBox(
+                  position: DecorationPosition.foreground,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Colors.yellow,
+                        width: tabIndex == 1 ? 5.0 : 0,
+                        style: tabIndex == 1
+                            ? BorderStyle.solid
+                            : BorderStyle.none,
+                      ),
+                    ),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      setState(() {
+                        tabIndex = 1;
+                        tabSelected = mostView();
+                      });
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor:
+                          tabIndex == 1 ? Colors.white : Colors.grey[200],
+                    ),
+                    child: Text(
+                      'Mejor Puntuadas',
+                      style: _textStyleLabels,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          flex: 1,
         ),
         Expanded(
           child: Column(
             children: [Expanded(child: tabSelected)],
           ),
-          flex: 9,
+          // flex: 9,
         ),
       ],
     );
