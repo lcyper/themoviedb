@@ -54,37 +54,27 @@ class Movies {
   // clase de llamada principal, maneja todo.
   Future<Widget> getMovies({int page = 1, String url, String id}) async {
     // tengo q continuar con el tema de mostrar la peli x ID
-    if (id == null) {
-      Map data;
-      if (cacheDataApi['genres'] == null) {
-        Map genresList = await makeRequest(url: 'genre/movie/list');
-        // if (genresList['hasError']) {
-        // return handleErrorWidget(genresList);
-        // }
-        genresList = Map.fromIterable(genresList['genres'],
-            key: (e) => e['id'], value: (e) => e['name']);
-        cacheDataApi['genres'] = genresList;
-      }
-
-      if (cacheDataApi[url] == null) {
-        data = await makeRequest(page: page, url: url);
-        cacheDataApi[url] = data;
-      } else {
-        data = cacheDataApi[url];
-      }
-      return createListView(data);
-    } else {
-      return Center(
-        child: ListView(
-          children: [
-            Text(this.title),
-            Image.network(
-              this.picture,
-            ),
-          ],
-        ),
-      );
+    if (id != null) {
+      return getMoviesInfo(id);
     }
+    Map data;
+    if (cacheDataApi['genres'] == null) {
+      Map genresList = await makeRequest(url: 'genre/movie/list');
+      // if (genresList['hasError']) {
+      // return handleErrorWidget(genresList);
+      // }
+      genresList = Map.fromIterable(genresList['genres'],
+          key: (e) => e['id'], value: (e) => e['name']);
+      cacheDataApi['genres'] = genresList;
+    }
+
+    if (cacheDataApi[url] == null) {
+      data = await makeRequest(page: page, url: url);
+      cacheDataApi[url] = data;
+    } else {
+      data = cacheDataApi[url];
+    }
+    return createListView(data);
   }
 
   Future<Widget> lookByQuerry(String inputValue) async {
@@ -102,6 +92,19 @@ class Movies {
     data = await makeRequest(page: 1, url: 'search/movie', query: inputValue);
     // cacheDataApi[url] = data;
     return createListView(data);
+  }
+
+  Widget getMoviesInfo(String id) {
+    return Center(
+      child: ListView(
+        children: [
+          Text(this.title),
+          Image.network(
+            this.picture,
+          ),
+        ],
+      ),
+    );
   }
 }
 
