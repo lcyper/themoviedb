@@ -19,3 +19,6 @@ A Flutter project to see movies info ONLY from [Themoviedb Api](www.themoviedb.o
 4. flutter devices
 5. flutter create web_app
 6. flutter run -d chrome (run project on chrome)
+
+- icon generator
+  https://romannurik.github.io/AndroidAssetStudio/icons-launcher.html
