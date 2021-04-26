@@ -62,74 +62,75 @@ class CreateCard extends StatelessWidget {
                   ),
                 ),
               ),
-              Expanded(
-                // flex: 70,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(110.0, 15.0, 7.0, 15.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              movie.title,
-                              overflow: TextOverflow.fade,
-                              maxLines: 2,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20.0,
-                                color: Colors.black,
-                              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                  MediaQuery.of(context).size.width * 0.3,
+                  15.0,
+                  7.0,
+                  15.0,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            movie.title,
+                            overflow: TextOverflow.fade,
+                            maxLines: 2,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.0,
+                              color: Colors.black,
                             ),
                           ),
+                        ),
 
-                          // Spacer(),
+                        // Spacer(),
 
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                left: 8.0,
-                              ),
-                              child: BorderedText(
-                                strokeWidth: 2.0,
-                                strokeColor: Colors.black,
-                                child: Text(
-                                  movie.voteAverage,
-                                  style: TextStyle(
-                                    color: Colors.yellow,
-                                  ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              left: 8.0,
+                            ),
+                            child: BorderedText(
+                              strokeWidth: 2.0,
+                              strokeColor: Colors.black,
+                              child: Text(
+                                movie.voteAverage,
+                                style: TextStyle(
+                                  color: Colors.yellow,
                                 ),
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                      // Spacer(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: movie.gender
-                            .map(
-                              (gender) => Text(
-                                gender.toString() + ' / ',
-                                overflow: TextOverflow.fade,
-                                softWrap: false,
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                    // Spacer(),
+                    Row(
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      // mainAxisSize: MainAxisSize.min,
+                      children: movie.gender
+                          .map(
+                            (gender) => Text(
+                              gender.toString() + ' / ',
+                              overflow: TextOverflow.fade,
+                              softWrap: false,
+                              maxLines: 1,
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ],
                 ),
-
-                // subtitle: Text(movie.description),
               ),
             ],
           ),
