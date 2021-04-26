@@ -48,7 +48,7 @@ class _MoviesTabState extends State<MoviesTab> {
                         tabIndex = 0;
                         pageController.animateToPage(
                           0,
-                          duration: Duration(seconds: 1),
+                          duration: Duration(milliseconds: 500),
                           curve: Curves.ease,
                         );
                       });
@@ -81,7 +81,7 @@ class _MoviesTabState extends State<MoviesTab> {
                         tabIndex = 1;
                         pageController.animateToPage(
                           1,
-                          duration: Duration(seconds: 1),
+                          duration: Duration(milliseconds: 500),
                           curve: Curves.ease,
                         );
                       });
