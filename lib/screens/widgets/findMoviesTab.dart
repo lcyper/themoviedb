@@ -21,6 +21,7 @@ class _FindMoviesTabState extends State<FindMoviesTab> {
           Form(
             child: TextFormField(
               onEditingComplete: () {
+                FocusScope.of(context).unfocus();
                 setState(() {
                   _movieList = Movies().lookByQuerry(_inputValue);
                 });
