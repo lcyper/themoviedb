@@ -7,7 +7,7 @@ class MoviesTab extends StatefulWidget {
 }
 
 class _MoviesTabState extends State<MoviesTab> {
-  Widget tabSelected = popular();
+  Widget tabSelected = getMoviesPage('movie/popular');
   int tabIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,7 @@ class _MoviesTabState extends State<MoviesTab> {
                     onPressed: () {
                       setState(() {
                         tabIndex = 0;
-                        tabSelected = popular();
+                        tabSelected = getMoviesPage('movie/popular');
                       });
                     },
                     child: Text(
@@ -72,7 +72,7 @@ class _MoviesTabState extends State<MoviesTab> {
                     onPressed: () {
                       setState(() {
                         tabIndex = 1;
-                        tabSelected = mostView();
+                        tabSelected = getMoviesPage('movie/top_rated');
                       });
                     },
                     style: TextButton.styleFrom(
