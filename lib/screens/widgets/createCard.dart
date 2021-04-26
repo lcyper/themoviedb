@@ -14,6 +14,7 @@ class CreateCard extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(
         top: 75.0,
+        bottom: 10.0,
       ),
       child: Card(
         shape: RoundedRectangleBorder(
@@ -33,12 +34,10 @@ class CreateCard extends StatelessWidget {
           },
           child: Stack(
             clipBehavior: Clip.none,
-            alignment: AlignmentDirectional.center,
+            alignment: AlignmentDirectional.topStart,
             children: [
               Positioned(
-                // top: -50.0,
-                bottom: 2.0,
-                left: 0,
+                bottom: 0.0,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(
                     15.0,
@@ -52,12 +51,14 @@ class CreateCard extends StatelessWidget {
                         ? Image.network(
                             movie.picture,
                             alignment: Alignment.center,
-                            width: 80.0,
-                            cacheWidth: 80,
+                            width: 90.0,
+                            cacheWidth: 90,
                           )
                         : Padding(
                             padding: const EdgeInsets.all(10.0),
-                            child: Icon(Icons.error_outline),
+                            child: Center(
+                              child: Icon(Icons.error_outline),
+                            ),
                           ),
                   ),
                 ),
@@ -91,7 +92,7 @@ class CreateCard extends StatelessWidget {
                           ),
                         ),
 
-                        // Spacer(),
+                        // Spacer(flex: 1),
 
                         Align(
                           alignment: Alignment.topRight,
@@ -113,7 +114,7 @@ class CreateCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    // Spacer(),
+                    // Spacer(flex: 1),
                     Row(
                       // mainAxisAlignment: MainAxisAlignment.center,
                       // crossAxisAlignment: CrossAxisAlignment.start,
