@@ -7,10 +7,13 @@ class MoviesTab extends StatefulWidget {
 }
 
 class _MoviesTabState extends State<MoviesTab> {
-  Widget tabSelected = getMoviesPage('movie/popular');
   int tabIndex = 0;
   @override
   Widget build(BuildContext context) {
+    var pageController = PageController(
+      initialPage: tabIndex,
+      keepPage: false,
+    );
     return Column(
       children: [
         SizedBox(
@@ -28,7 +31,7 @@ class _MoviesTabState extends State<MoviesTab> {
                     border: Border(
                       bottom: BorderSide(
                         color: Colors.yellow,
-                        width: tabIndex == 0 ? 5.0 : 0,
+                        width: 5.0,
                         style: tabIndex == 0
                             ? BorderStyle.solid
                             : BorderStyle.none,
@@ -43,7 +46,11 @@ class _MoviesTabState extends State<MoviesTab> {
                     onPressed: () {
                       setState(() {
                         tabIndex = 0;
-                        tabSelected = getMoviesPage('movie/popular');
+                        pageController.animateToPage(
+                          0,
+                          duration: Duration(seconds: 1),
+                          curve: Curves.ease,
+                        );
                       });
                     },
                     child: Text(
@@ -61,7 +68,7 @@ class _MoviesTabState extends State<MoviesTab> {
                     border: Border(
                       bottom: BorderSide(
                         color: Colors.yellow,
-                        width: tabIndex == 1 ? 5.0 : 0,
+                        width: 5.0,
                         style: tabIndex == 1
                             ? BorderStyle.solid
                             : BorderStyle.none,
@@ -72,7 +79,11 @@ class _MoviesTabState extends State<MoviesTab> {
                     onPressed: () {
                       setState(() {
                         tabIndex = 1;
-                        tabSelected = getMoviesPage('movie/top_rated');
+                        pageController.animateToPage(
+                          1,
+                          duration: Duration(seconds: 1),
+                          curve: Curves.ease,
+                        );
                       });
                     },
                     style: TextButton.styleFrom(
@@ -90,10 +101,17 @@ class _MoviesTabState extends State<MoviesTab> {
           ),
         ),
         Expanded(
-          child: Column(
-            children: [Expanded(child: tabSelected)],
+          child: PageView(
+            onPageChanged: (index) => setState(() {
+              tabIndex = index;
+            }),
+            physics: BouncingScrollPhysics(),
+            controller: pageController,
+            children: [
+              getMoviesPage('movie/popular'),
+              getMoviesPage('movie/top_rated'),
+            ],
           ),
-          // flex: 9,
         ),
       ],
     );
