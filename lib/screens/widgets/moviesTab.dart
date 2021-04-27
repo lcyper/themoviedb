@@ -19,7 +19,6 @@ class _MoviesTabState extends State<MoviesTab> {
             child: TabBar(
               indicatorColor: Colors.yellow,
               indicatorWeight: 5.0,
-              unselectedLabelColor: Colors.grey[200],
               indicatorPadding: EdgeInsets.only(
                 left: 50.0,
                 right: 50.0,
