@@ -33,6 +33,13 @@ class _FindMoviesTabState extends State<FindMoviesTab> {
               autofocus: true,
               decoration: InputDecoration(
                 hintText: 'Nombre de la peli?',
+                suffixIcon: IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      // setState(() {
+                      //   _inputValue = "";
+                      // });
+                    }),
               ),
             ),
           ),
