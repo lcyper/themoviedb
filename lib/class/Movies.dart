@@ -17,18 +17,24 @@ final Map cacheDataApi = {}; //aca se almacena el cache de peliculas
 class Movies {
   final String title;
   final String description;
-  final List gender;
-  final String picture;
+  final List<String> gender;
+  final String posterPath;
   final String voteAverage;
   final String id;
+  final String backdropPath;
+  final bool adult;
+  final DateTime releaseDate;
 
   Movies({
+    this.adult,
     this.title,
     this.description,
     this.gender,
-    this.picture,
+    this.posterPath,
+    this.backdropPath,
     this.voteAverage,
     this.id,
+    this.releaseDate,
   });
 
   // _pref()async => await SharedPreferences preferences;
@@ -36,18 +42,27 @@ class Movies {
   factory Movies.fromJson(Map json) {
     String title = json['title'] ?? json['original_title'];
     String description = json['overview'];
-    List gender = getGenres(json['genre_ids']);
-    String picture =
+    List<String> gender = setGenres(json['genre_ids']);
+    String posterPath =
         json['poster_path'] != null ? baseUrlImage + json['poster_path'] : null;
+    String backdropPath = json['backdrop_path'] != null
+        ? baseUrlImage + json['backdrop_path']
+        : null;
     String voteAverage = json['vote_average'].toString();
     String id = json['id'].toString();
+    bool adult = json['adult'];
+    DateTime releaseDate = DateTime.parse(json['release_date']);
+
     return Movies(
       title: title,
       description: description,
       gender: gender,
-      picture: picture,
+      posterPath: posterPath,
+      backdropPath: backdropPath,
       voteAverage: voteAverage,
       id: id,
+      adult: adult,
+      releaseDate: releaseDate,
     );
   }
 
@@ -100,11 +115,23 @@ class Movies {
         children: [
           Text(this.title),
           Image.network(
-            this.picture,
+            this.posterPath,
           ),
         ],
       ),
     );
+  }
+
+  String getGender(List<String> listGender) {
+    String genderNames = "";
+    for (var gender in listGender) {
+      if (gender == listGender.last) {
+        genderNames += " " + gender;
+      } else {
+        genderNames += " " + gender + ' /';
+      }
+    }
+    return genderNames;
   }
 }
 
@@ -153,10 +180,11 @@ Widget createListView(Map data) {
   );
 }
 
-List getGenres(List genresList) {
-  List genresListByName = genresList.map((id) {
+List setGenres(List genresList) {
+  List<String> genresListByName = List<String>.from(genresList.map((id) {
     return cacheDataApi['genres'][id];
-  }).toList();
+  }));
+  // .toList();
 
   return genresListByName; // ['Accion', 'Drama'];
 }

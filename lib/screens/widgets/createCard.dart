@@ -6,14 +6,16 @@ import 'package:themoviedb/screens/pages/movie_card_page.dart';
 
 class CreateCard extends StatelessWidget {
   final Movies movie;
+  final List<Widget> widgets;
 
-  const CreateCard({Key key, this.movie}) : super(key: key);
+  const CreateCard({Key key, @required this.movie, this.widgets})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(
-        top: 75.0,
+        top: 85.0,
         bottom: 10.0,
       ),
       child: Card(
@@ -47,9 +49,9 @@ class CreateCard extends StatelessWidget {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    child: movie.picture != null
+                    child: movie.posterPath != null
                         ? Image.network(
-                            movie.picture,
+                            movie.posterPath,
                             alignment: Alignment.center,
                             width: 90.0,
                             cacheWidth: 90,
@@ -67,7 +69,7 @@ class CreateCard extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(
                   MediaQuery.of(context).size.width * 0.3,
                   15.0,
-                  7.0,
+                  15.0,
                   15.0,
                 ),
                 child: Column(
@@ -93,46 +95,48 @@ class CreateCard extends StatelessWidget {
                         ),
 
                         // Spacer(flex: 1),
-
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              left: 8.0,
+               
+                      ],                    ),
+                    // Spacer(flex: 1),
+                    Row(
+                      children: [
+                        if (movie.adult)
+                          OutlinedButton.icon(
+                            icon: Icon(
+                              Icons.explicit_outlined,
                             ),
-                            child: BorderedText(
-                              strokeWidth: 2.0,
-                              strokeColor: Colors.black,
-                              child: Text(
-                                movie.voteAverage,
-                                style: TextStyle(
-                                  color: Colors.yellow,
-                                ),
-                              ),
-                            ),
+                            label: Text("+18"),
+                            onPressed: null,
                           ),
+                        OutlinedButton.icon(
+                          icon: Icon(
+                            Icons.date_range,
+                            color: Colors.black87,
+                          ),
+                          label: Text(
+                            movie.releaseDate.year.toString(),
+                          ),
+                          onPressed: null,
+                        ),
+                        OutlinedButton.icon(
+                          icon: Icon(
+                            Icons.star,
+                            color: Colors.yellow[200],
+                          ),
+                          label: Text(movie.voteAverage),
+                          onPressed: null,
                         ),
                       ],
                     ),
-                    // Spacer(flex: 1),
-                    Row(
-                      // mainAxisAlignment: MainAxisAlignment.center,
-                      // crossAxisAlignment: CrossAxisAlignment.start,
-                      // mainAxisSize: MainAxisSize.min,
-                      children: movie.gender
-                          .map(
-                            (gender) => Text(
-                              gender.toString() + ' / ',
-                              overflow: TextOverflow.fade,
-                              softWrap: false,
-                              maxLines: 1,
-                            ),
-                          )
-                          .toList(),
+                    Text(
+                      Movies().getGender(movie.gender),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
               ),
+              // if (widgets != null) ...widgets,
             ],
           ),
         ),
