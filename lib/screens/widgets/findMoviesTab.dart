@@ -11,6 +11,8 @@ class FindMoviesTab extends StatefulWidget {
 class _FindMoviesTabState extends State<FindMoviesTab> {
   String _inputValue;
   Future<Widget> _movieList;
+  final TextEditingController _controler = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -20,6 +22,7 @@ class _FindMoviesTabState extends State<FindMoviesTab> {
           Text('Te gustaria buscar una peli?'),
           Form(
             child: TextFormField(
+              controller: _controler,
               onEditingComplete: () {
                 FocusScope.of(context).unfocus();
                 setState(() {
@@ -34,11 +37,9 @@ class _FindMoviesTabState extends State<FindMoviesTab> {
               decoration: InputDecoration(
                 hintText: 'Nombre de la peli?',
                 suffixIcon: IconButton(
-                    icon: Icon(Icons.close),
+                    icon: Icon(Icons.clear),
                     onPressed: () {
-                      // setState(() {
-                      //   _inputValue = "";
-                      // });
+                      _controler.clear();
                     }),
               ),
             ),
