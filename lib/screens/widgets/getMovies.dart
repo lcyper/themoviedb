@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:themoviedb/class/Movies.dart';
 
-Widget getMoviesPage(String url) => FutureBuilder<Widget>(
+Widget getMoviesPage(String url) => FutureBuilder(
       future: Movies().getMovies(url: url),
       builder: (context, snapshot) => snapshot.hasData
-          ? snapshot.data
+          ? createListView(snapshot.data)
           : snapshot.hasError
               ? Center(
                   child: Text(

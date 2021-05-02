@@ -10,7 +10,7 @@ class FindMoviesTab extends StatefulWidget {
 
 class _FindMoviesTabState extends State<FindMoviesTab> {
   String _inputValue;
-  Future<Widget> _movieList;
+  Future<List<Movies>> _movieList;
   final TextEditingController _controler = TextEditingController();
 
   @override
@@ -51,7 +51,9 @@ class _FindMoviesTabState extends State<FindMoviesTab> {
                     ? Center(
                         child: Text('Error.'),
                       )
-                    : Expanded(child: snapshot.data)
+                    : Expanded(
+                        child: createListView(snapshot.data),
+                      )
                 : Text('las peliculas apareceran aca.'),
           ),
         ],

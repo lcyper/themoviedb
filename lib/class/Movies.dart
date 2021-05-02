@@ -51,7 +51,9 @@ class Movies {
     String voteAverage = json['vote_average'].toString();
     String id = json['id'].toString();
     bool adult = json['adult'];
-    DateTime releaseDate = DateTime.parse(json['release_date']);
+    DateTime releaseDate = json['release_date'] != null
+        ? DateTime.parse(json['release_date'])
+        : null;
 
     return Movies(
       title: title,
@@ -67,7 +69,7 @@ class Movies {
   }
 
   // clase de llamada principal, maneja todo.
-  Future<Widget> getMovies({int page = 1, String url, String id}) async {
+  Future getMovies({int page = 1, String url, String id}) async {
     // tengo q continuar con el tema de mostrar la peli x ID
     if (id != null) {
       return getMoviesInfo(id);
@@ -89,10 +91,12 @@ class Movies {
     } else {
       data = cacheDataApi[url];
     }
-    return createListView(data);
+    List<Movies> list = List<Movies>.from(
+        data['results'].map((element) => Movies.fromJson(element)));
+    return list;
   }
 
-  Future<Widget> lookByQuerry(String inputValue) async {
+  Future<List<Movies>> lookByQuerry(String inputValue) async {
     Map data;
     if (cacheDataApi['genres'] == null) {
       Map genresList = await makeRequest(url: 'genre/movie/list');
@@ -106,20 +110,18 @@ class Movies {
 
     data = await makeRequest(page: 1, url: 'search/movie', query: inputValue);
     // cacheDataApi[url] = data;
-    return createListView(data);
+    if (data['hasError'] == true) {
+      return [Movies()];
+    }
+    List<Movies> list = List<Movies>.from(
+        data['results'].map((element) => Movies.fromJson(element)));
+    return list;
   }
 
-  Widget getMoviesInfo(String id) {
-    return Center(
-      child: ListView(
-        children: [
-          Text(this.title),
-          Image.network(
-            this.posterPath,
-          ),
-        ],
-      ),
-    );
+  Future<Movies> getMoviesInfo(String id) async {
+    // Map data = await makeRequest(url: 'genre/movie/list');
+
+    return this;
   }
 
   String getGender(List<String> listGender) {
@@ -164,27 +166,24 @@ Future<Map<String, dynamic>> makeRequest(
   }
 }
 
-Widget createListView(Map data) {
-  if (data['results'].length == 0) {
+Widget createListView(List<Movies> movies) {
+  if (movies[0].title == null) {
     return Text('No hemos encontrado lo que buscaste.');
   }
-  List list =
-      data['results'].map((element) => Movies.fromJson(element)).toList();
-
   return ListView.builder(
     // scrollDirection: Axis.vertical,
     // shrinkWrap: true,
     padding: const EdgeInsets.all(8),
-    itemCount: list.length,
-    itemBuilder: (context, index) => CreateCard(movie: list[index]),
+    itemCount: movies.length,
+    itemBuilder: (context, index) => CreateCard(movie: movies[index]),
   );
 }
 
 List setGenres(List genresList) {
-  List<String> genresListByName = List<String>.from(genresList.map((id) {
-    return cacheDataApi['genres'][id];
-  }));
-  // .toList();
-
+  List<String> genresListByName = List<String>.from(
+    genresList.map((id) {
+      return cacheDataApi['genres'][id];
+    }),
+  );
   return genresListByName; // ['Accion', 'Drama'];
 }
