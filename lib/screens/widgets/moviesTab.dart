@@ -10,8 +10,8 @@ class _MoviesTabState extends State<MoviesTab> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      initialIndex: 0,
-      length: 2,
+      initialIndex: 1,
+      length: 2, //3
       child: Column(
         children: [
           SizedBox(
@@ -26,6 +26,11 @@ class _MoviesTabState extends State<MoviesTab> {
               labelStyle: TextStyle(fontWeight: FontWeight.bold),
               unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
               tabs: [
+                // Tab(
+                //   icon: Icon(
+                //     Icons.favorite,
+                //   ),
+                // ),
                 Tab(
                   child: Text(
                     'Populares',
@@ -45,6 +50,7 @@ class _MoviesTabState extends State<MoviesTab> {
             child: TabBarView(
               physics: BouncingScrollPhysics(),
               children: [
+                // Icon(Icons.favorite_border),
                 getMoviesPage('movie/popular'),
                 getMoviesPage('movie/top_rated'),
               ],
