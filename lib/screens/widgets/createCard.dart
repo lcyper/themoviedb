@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:themoviedb/class/Movies.dart';
-import 'package:themoviedb/helpers/bordered_text.dart';
 import 'package:themoviedb/screens/pages/movie_card_page.dart';
 
 class CreateCard extends StatelessWidget {
@@ -15,8 +14,8 @@ class CreateCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(
-        top: 85.0,
-        bottom: 10.0,
+        top: 35.0,
+        bottom: 0.0,
       ),
       child: Card(
         shape: RoundedRectangleBorder(
@@ -39,7 +38,7 @@ class CreateCard extends StatelessWidget {
             alignment: AlignmentDirectional.topStart,
             children: [
               Positioned(
-                bottom: 0.0,
+                top: -30.0,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(
                     15.0,
@@ -48,21 +47,20 @@ class CreateCard extends StatelessWidget {
                     15.0,
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    child: movie.posterPath != null
-                        ? Image.network(
-                            movie.posterPath,
-                            alignment: Alignment.center,
-                            width: 90.0,
-                            cacheWidth: 90,
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Center(
-                              child: Icon(Icons.error_outline),
-                            ),
-                          ),
-                  ),
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      child: movie.posterPath != null
+                          ? Image.network(
+                              movie.posterPath,
+                              alignment: Alignment.center,
+                              width: 90.0,
+                              cacheWidth: 90,
+                            )
+                          : Image.network(
+                              'https://www.themoviedb.org/assets/2/apple-touch-icon-cfba7699efe7a742de25c28e08c38525f19381d31087c69e89d6bcb8e3c0ddfa.png',
+                              alignment: Alignment.bottomCenter,
+                              width: 90.0,
+                              cacheWidth: 90,
+                            )),
                 ),
               ),
               Padding(
@@ -95,48 +93,64 @@ class CreateCard extends StatelessWidget {
                         ),
 
                         // Spacer(flex: 1),
-               
-                      ],                    ),
+                      ],
+                    ),
                     // Spacer(flex: 1),
                     Row(
                       children: [
                         if (movie.adult)
-                          OutlinedButton.icon(
-                            icon: Icon(
-                              Icons.explicit_outlined,
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: OutlinedButton.icon(
+                              icon: Icon(
+                                Icons.explicit_outlined,
+                              ),
+                              label: Text("+18"),
+                              onPressed: null,
                             ),
-                            label: Text("+18"),
+                          ),
+                        if (movie.releaseDate != null)
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: OutlinedButton.icon(
+                              icon: Icon(
+                                Icons.date_range,
+                                color: Colors.black87,
+                              ),
+                              label: Text(
+                                movie.releaseDate.year.toString(),
+                              ),
+                              onPressed: null,
+                            ),
+                          ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: OutlinedButton.icon(
+                            icon: Icon(
+                              Icons.star,
+                              color: Colors.yellow[200],
+                            ),
+                            label: Text(movie.voteAverage),
                             onPressed: null,
                           ),
-                        OutlinedButton.icon(
-                          icon: Icon(
-                            Icons.date_range,
-                            color: Colors.black87,
-                          ),
-                          label: Text(
-                            movie.releaseDate.year.toString(),
-                          ),
-                          onPressed: null,
-                        ),
-                        OutlinedButton.icon(
-                          icon: Icon(
-                            Icons.star,
-                            color: Colors.yellow[200],
-                          ),
-                          label: Text(movie.voteAverage),
-                          onPressed: null,
                         ),
                       ],
                     ),
-                    Text(
-                      Movies().getGender(movie.gender),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Text(
+                        Movies().getGender(movie.gender),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
+                    if (widgets != null)
+                      Column(
+                        children: [Divider(), ...widgets],
+                      ),
                   ],
                 ),
               ),
-              // if (widgets != null) ...widgets,
             ],
           ),
         ),
