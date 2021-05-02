@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:themoviedb/helpers/home_widgets_handler.dart';
+import 'package:themoviedb/screens/widgets/findMoviesTab.dart';
+import 'package:themoviedb/screens/widgets/moviesTab.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -13,7 +15,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: homeWidgetsHandler(_selectedTabIndex),
+        child: _selectedTabIndex == 0 ? MoviesTab() : FindMoviesTab(),
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
