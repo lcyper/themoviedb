@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:themoviedb/helpers/home_widgets_handler.dart';
 import 'package:themoviedb/screens/widgets/findMoviesTab.dart';
 import 'package:themoviedb/screens/widgets/moviesTab.dart';
 
