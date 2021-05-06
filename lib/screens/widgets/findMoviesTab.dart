@@ -9,7 +9,6 @@ class FindMoviesTab extends StatefulWidget {
 }
 
 class _FindMoviesTabState extends State<FindMoviesTab> {
-  String _inputValue;
   Future<List<Movies>> _movieList;
   final TextEditingController _controler = TextEditingController();
 
@@ -25,22 +24,26 @@ class _FindMoviesTabState extends State<FindMoviesTab> {
               controller: _controler,
               onEditingComplete: () {
                 FocusScope.of(context).unfocus();
-                setState(() {
-                  _movieList = Movies().lookByQuerry(_inputValue);
-                });
-                print(_inputValue);
+                if (_controler.text.length > 1) {
+                  setState(() {
+                    _movieList = Movies().lookByQuerry(_controler.text);
+                  });
+                }
               },
-              onChanged: (value) {
-                _inputValue = value;
-              },
+              onChanged: (value) => setState(() {}),
               autofocus: true,
               decoration: InputDecoration(
                 hintText: 'Nombre de la peli?',
-                suffixIcon: IconButton(
-                    icon: Icon(Icons.clear),
-                    onPressed: () {
-                      _controler.clear();
-                    }),
+                suffixIcon: _controler.text.length > 0
+                    ? IconButton(
+                        icon: Icon(
+                          Icons.clear,
+                          color: Colors.black,
+                        ),
+                        onPressed: () {
+                          _controler.clear();
+                        })
+                    : null,
               ),
             ),
           ),
