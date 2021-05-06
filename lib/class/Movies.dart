@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:themoviedb/class/Actors.dart';
 // import 'package:themoviedb/helpers/helpers.dart'; //handleError
 import 'package:themoviedb/helpers/shared_preferences.dart';
 import 'package:themoviedb/screens/widgets/createCard.dart';
@@ -24,7 +25,7 @@ class Movies {
   final String backdropPath;
   final bool adult;
   final DateTime releaseDate;
-  Actors actors;
+  List<Actors> actors;
 
   Movies({
     this.adult,
@@ -147,37 +148,10 @@ class Movies {
           : null;
       return Actors.fromJson(actor);
     });
-    list = List<Actors>.from(list);
-    list;
-    // list = List<Map<String, dynamic>>.from(json['cast']);
-    // this.actors = json['cast'].toList();
-    // this.actors = list;
+    this.actors = List<Actors>.from(list);
   }
 }
 
-class Actors {
-  final String name;
-  final String character;
-  final String image;
-  final int order;
-  final String creditId;
-
-  Actors({this.name, this.character, this.image, this.order, this.creditId});
-  factory Actors.fromJson(Map actorsData) {
-    //    String name=actorsData['name'];
-    // final String character;
-    // final String image;
-    // final int order;
-    // final String credit_id;
-    return Actors(
-      name: actorsData['name'],
-      character: actorsData['character'],
-      image: actorsData['image'],
-      order: actorsData['order'],
-      creditId: actorsData['credit_id'],
-    );
-  }
-}
 
 /////////////////////////////////////////
 // Funciones de ayuda para esta clase //
