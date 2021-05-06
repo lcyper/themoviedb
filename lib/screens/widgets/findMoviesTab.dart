@@ -11,6 +11,13 @@ class FindMoviesTab extends StatefulWidget {
 class _FindMoviesTabState extends State<FindMoviesTab> {
   Future<List<Movies>> _movieList;
   final TextEditingController _controler = TextEditingController();
+  List<Widget> _noDataYet = [
+    Text('las peliculas apareceran aca.'),
+    Center(
+      child: CircularProgressIndicator(),
+    ),
+  ];
+  int _indexNoDataYet = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +33,7 @@ class _FindMoviesTabState extends State<FindMoviesTab> {
                 FocusScope.of(context).unfocus();
                 if (_controler.text.length > 1) {
                   setState(() {
+                    _indexNoDataYet = 1;
                     _movieList = Movies().lookByQuerry(_controler.text);
                   });
                 }
@@ -57,7 +65,7 @@ class _FindMoviesTabState extends State<FindMoviesTab> {
                     : Expanded(
                         child: createListView(snapshot.data),
                       )
-                : Text('las peliculas apareceran aca.'),
+                : _noDataYet[_indexNoDataYet],
           ),
         ],
       ),
