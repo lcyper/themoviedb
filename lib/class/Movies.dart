@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:themoviedb/helpers/helpers.dart';
+// import 'package:themoviedb/helpers/helpers.dart'; //handleError
 import 'package:themoviedb/helpers/shared_preferences.dart';
 import 'package:themoviedb/screens/widgets/createCard.dart';
 
@@ -24,6 +24,7 @@ class Movies {
   final String backdropPath;
   final bool adult;
   final DateTime releaseDate;
+  Actors actors;
 
   Movies({
     this.adult,
@@ -35,6 +36,7 @@ class Movies {
     this.voteAverage,
     this.id,
     this.releaseDate,
+    this.actors,
   });
 
   // _pref()async => await SharedPreferences preferences;
@@ -42,7 +44,7 @@ class Movies {
   factory Movies.fromJson(Map json) {
     String title = json['title'] ?? json['original_title'];
     String description = json['overview'];
-    List<String> gender = setGenres(json['genre_ids']);
+    List<String> gender = _setGenres(json['genre_ids']);
     String posterPath =
         json['poster_path'] != null ? baseUrlImage + json['poster_path'] : null;
     String backdropPath = json['backdrop_path'] != null
@@ -70,16 +72,20 @@ class Movies {
 
   // clase de llamada principal, maneja todo.
   Future getMovies({int page = 1, String url, String id}) async {
-    // tengo q continuar con el tema de mostrar la peli x ID
+    // cuando se pide el detalle de una pelicula
     if (id != null) {
-      return getMoviesInfo(id);
+      Map json = await makeRequest(url: 'movie/$id/credits');
+      _setActors(json);
+
+      return this;
     }
     Map data;
     if (cacheDataApi['genres'] == null) {
       Map genresList = await makeRequest(url: 'genre/movie/list');
-      // if (genresList['hasError']) {
-      // return handleErrorWidget(genresList);
-      // }
+      if (genresList['hasError'] != null) {
+        print('genresList Error: ' + genresList['hasError']);
+        // return handleErrorWidget(genresList);
+      }
       genresList = Map.fromIterable(genresList['genres'],
           key: (e) => e['id'], value: (e) => e['name']);
       cacheDataApi['genres'] = genresList;
@@ -118,22 +124,58 @@ class Movies {
     return list;
   }
 
-  Future<Movies> getMoviesInfo(String id) async {
-    // Map data = await makeRequest(url: 'genre/movie/list');
-
-    return this;
-  }
-
   String getGender(List<String> listGender) {
     String genderNames = "";
     for (var gender in listGender) {
       if (gender == listGender.last) {
         genderNames += " " + gender;
       } else {
-        genderNames += " " + gender + ' /';
+        genderNames += " " + gender + ' |';
       }
     }
     return genderNames;
+  }
+
+  getActors() {
+    // this.actors;
+  }
+
+  void _setActors(Map json) {
+    var list = json['cast'].map((actor) {
+      actor['image'] = actor['profile_path'] != null
+          ? baseUrlImage + actor['profile_path']
+          : null;
+      return Actors.fromJson(actor);
+    });
+    list = List<Actors>.from(list);
+    list;
+    // list = List<Map<String, dynamic>>.from(json['cast']);
+    // this.actors = json['cast'].toList();
+    // this.actors = list;
+  }
+}
+
+class Actors {
+  final String name;
+  final String character;
+  final String image;
+  final int order;
+  final String creditId;
+
+  Actors({this.name, this.character, this.image, this.order, this.creditId});
+  factory Actors.fromJson(Map actorsData) {
+    //    String name=actorsData['name'];
+    // final String character;
+    // final String image;
+    // final int order;
+    // final String credit_id;
+    return Actors(
+      name: actorsData['name'],
+      character: actorsData['character'],
+      image: actorsData['image'],
+      order: actorsData['order'],
+      creditId: actorsData['credit_id'],
+    );
   }
 }
 
@@ -145,6 +187,7 @@ Future<Map<String, dynamic>> makeRequest(
   // implementar el cache de la peticion
 
   try {
+    // print('URL: ' + baseUrl + url);
     var response = await Dio().get(
       baseUrl + url,
       queryParameters: {
@@ -179,7 +222,7 @@ Widget createListView(List<Movies> movies) {
   );
 }
 
-List setGenres(List genresList) {
+List _setGenres(List genresList) {
   List<String> genresListByName = List<String>.from(
     genresList.map((id) {
       return cacheDataApi['genres'][id];
