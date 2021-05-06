@@ -16,29 +16,33 @@ class _HomeState extends State<Home> {
       body: Center(
         child: _selectedTabIndex == 0 ? MoviesTab() : FindMoviesTab(),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.black,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.movie_outlined),
-            label: 'pelis',
-            backgroundColor: Colors.black,
-            activeIcon: Icon(Icons.movie),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.find_in_page_outlined),
-            activeIcon: Icon(Icons.find_in_page),
-            label: 'buscar',
-          )
-        ],
-        currentIndex: _selectedTabIndex,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.grey[400],
-        onTap: _onBottomMenuTapped,
-        // showSelectedLabels: false,
-        showUnselectedLabels: false,
-      ),
+      bottomNavigationBar: _buildBottomNavigationBar(),
+    );
+  }
+
+  BottomNavigationBar _buildBottomNavigationBar() {
+    return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      backgroundColor: Colors.black,
+      items: [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.movie_outlined),
+          label: 'pelis',
+          backgroundColor: Colors.black,
+          activeIcon: Icon(Icons.movie),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.find_in_page_outlined),
+          activeIcon: Icon(Icons.find_in_page),
+          label: 'buscar',
+        )
+      ],
+      currentIndex: _selectedTabIndex,
+      selectedItemColor: Colors.white,
+      unselectedItemColor: Colors.grey[400],
+      onTap: _onBottomMenuTapped,
+      // showSelectedLabels: false,
+      showUnselectedLabels: false,
     );
   }
 
