@@ -5,34 +5,64 @@ import 'package:themoviedb/screens/pages/movie_card_page.dart';
 
 class CreateCard extends StatelessWidget {
   final Movies movie;
-  final List<Widget> widgets;
 
-  const CreateCard({Key key, @required this.movie, this.widgets})
-      : super(key: key);
+  CreateCard({
+    Key key,
+    @required this.movie,
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(
-        top: 35.0,
-        bottom: 0.0,
-      ),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(8.0),
+  Widget build(BuildContext context) => Container(
+        margin: EdgeInsets.only(
+          top: 35.0,
+          bottom: 0.0,
+        ),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(8.0),
+            ),
+          ),
+          child: InkWell(
+            key: Key(movie.id),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MovieCardPage(movie: movie),
+                ),
+              );
+            },
+            child: _cardMovieInfo(context),
           ),
         ),
-        child: InkWell(
-          key: Key(movie.id),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MovieCardPage(movie: movie),
-              ),
-            );
-          },
+      );
+
+  Widget movieInfoOnly(BuildContext context, List<Widget> children,
+      {bool showLognTitle = true}) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+      ),
+      child: Column(
+        children: [
+          _cardMovieInfo(context, showLognTitle: showLognTitle),
+          for (var child in children)
+            Padding(
+              padding: EdgeInsets.all(15.0),
+              child: child,
+            )
+        ],
+      ),
+    );
+  }
+
+  Widget _cardMovieInfo(BuildContext context, {bool showLognTitle = false}) =>
+      Hero(
+        transitionOnUserGestures: true,
+        tag: "movieInfo" + movie.id,
+        child: Material(
+          type: MaterialType.transparency,
           child: Stack(
             clipBehavior: Clip.none,
             alignment: AlignmentDirectional.topStart,
@@ -46,21 +76,7 @@ class CreateCard extends StatelessWidget {
                     15.0,
                     15.0,
                   ),
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      child: movie.posterPath != null
-                          ? Image.network(
-                              movie.posterPath,
-                              alignment: Alignment.center,
-                              width: 90.0,
-                              cacheWidth: 90,
-                            )
-                          : Image.network(
-                              'https://www.themoviedb.org/assets/2/apple-touch-icon-cfba7699efe7a742de25c28e08c38525f19381d31087c69e89d6bcb8e3c0ddfa.png',
-                              alignment: Alignment.bottomCenter,
-                              width: 90.0,
-                              cacheWidth: 90,
-                            )),
+                  child: _moviePoster(),
                 ),
               ),
               Padding(
@@ -83,10 +99,10 @@ class CreateCard extends StatelessWidget {
                           child: Text(
                             movie.title,
                             overflow: TextOverflow.fade,
-                            maxLines: 2,
+                            maxLines: showLognTitle ? 4 : 2,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 20.0,
+                              fontSize: 19.0,
                               color: Colors.black,
                             ),
                           ),
@@ -95,44 +111,24 @@ class CreateCard extends StatelessWidget {
                         // Spacer(flex: 1),
                       ],
                     ),
-                    // Spacer(flex: 1),
                     Row(
                       children: [
                         if (movie.adult)
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: OutlinedButton.icon(
-                              icon: Icon(
-                                Icons.explicit_outlined,
-                              ),
-                              label: Text("+18"),
-                              onPressed: null,
-                            ),
+                          _outlinedBototn(
+                            icon: Icons.explicit_outlined,
+                            color: Colors.red,
+                            text: "+18",
                           ),
                         if (movie.releaseDate != null)
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: OutlinedButton.icon(
-                              icon: Icon(
-                                Icons.date_range,
-                                color: Colors.black87,
-                              ),
-                              label: Text(
-                                movie.releaseDate.year.toString(),
-                              ),
-                              onPressed: null,
-                            ),
+                          _outlinedBototn(
+                            icon: Icons.date_range,
+                            color: Colors.black87,
+                            text: movie.releaseDate.year.toString(),
                           ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: OutlinedButton.icon(
-                            icon: Icon(
-                              Icons.star,
-                              color: Colors.yellow[200],
-                            ),
-                            label: Text(movie.voteAverage),
-                            onPressed: null,
-                          ),
+                        _outlinedBototn(
+                          icon: Icons.star,
+                          color: Colors.yellow[200],
+                          text: movie.voteAverage,
                         ),
                       ],
                     ),
@@ -144,17 +140,48 @@ class CreateCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    if (widgets != null)
-                      Column(
-                        children: [Divider(), ...widgets],
-                      ),
                   ],
                 ),
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
+      );
+
+  Padding _outlinedBototn({IconData icon, Color color, String text}) => Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: OutlinedButton.icon(
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
+          ),
+          icon: Icon(
+            icon,
+            color: color,
+          ),
+          label: Text(
+            text,
+          ),
+          onPressed: null,
+        ),
+      );
+
+  Widget _moviePoster() => ClipRRect(
+      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      child: movie.posterPath != null
+          ? Image.network(
+              movie.posterPath,
+              alignment: Alignment.center,
+              width: 90.0,
+              cacheWidth: 90,
+            )
+          : Image.network(
+              'https://www.themoviedb.org/assets/2/apple-touch-icon-cfba7699efe7a742de25c28e08c38525f19381d31087c69e89d6bcb8e3c0ddfa.png',
+              alignment: Alignment.bottomCenter,
+              width: 90.0,
+              cacheWidth: 90,
+            ));
 }
