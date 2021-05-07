@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:themoviedb/class/Movies.dart';
 
@@ -38,7 +36,12 @@ class _FindMoviesTabState extends State<FindMoviesTab> {
                   });
                 }
               },
-              onChanged: (value) => setState(() {}),
+              onChanged: (value) {
+                // para evitar llamar a setState cada vez, solo cuando es necesario
+                if (value.length == 0 || value.length == 1) {
+                  setState(() {});
+                }
+              },
               autofocus: true,
               decoration: InputDecoration(
                 hintText: 'Nombre de la peli?',
@@ -49,7 +52,9 @@ class _FindMoviesTabState extends State<FindMoviesTab> {
                           color: Colors.black,
                         ),
                         onPressed: () {
-                          _controler.clear();
+                          setState(() {
+                            _controler.clear();
+                          });
                         })
                     : null,
               ),
