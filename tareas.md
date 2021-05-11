@@ -1,29 +1,26 @@
-proyecto nivelador de curso de flutter
-===
+# proyecto nivelador de curso de flutter
 
-(mi primera app) - 30/3/2021
+mi primera app
+inicio - 30/3/2021
+fin - 11/5/2021
 
 tareas:
-hero(tag) widget to movie_card for transition
-crear pagina detalle de la pelicula
-    - boton para ver trahiler
-    - popup del video de youtube
-    - lista de actores en scroll horizontal
-crear pagina de favoritos
-    - boton para ir a la pagina
-    - poder agregar y eliminar de la lista
+#usar shared_preferences para guardar "CacheDataApi"
 
-#detalle pelicula - armar
+#scroll infinito en la lista de peliculas
 
-En buscar pelis agregar icono de borrar texto - una **x** en el inputText
+#pagina detalle de la pelicula - popup del video de youtube
+
+#implementar sharedPreferences: - guardar las peliculas - actualizar las peliculas si hay internet(inicio) o si el usuario deliza hacia abajo - guardar las peliculas favoritas
+#implementar provider con las peliculas favoritas, como manejar eso?
+#crear pagina de favoritos - boton para ir a la pagina - poder agregar y eliminar de la lista
+
+#crear una paleta de colores (color.primary) como variables globales
+#arreglar home, FloatinBottonAction FAB shape: CircularNotchedRectangle() no funciona?
 
 Crear un historial de pelis buscadas, solo texto de busqueda como un autocompletado
 
-ver el schema y arreglar posibles errores donde puede q me lleguen datos con **null**
-
 implementar helpers handleError en movie?
-
-#para traer a los actores /movie/{movie_id}/credits
 
 #pagina detalle
 -genero
@@ -36,7 +33,13 @@ clases:
 organizacion de codigo:
 lib
 |-screens/
-    |_pages
-    |_widgets
+|\_pages
+|\_widgets
 |-class/
 |-helpers/
+
+agregar test?
+package:integration_test
+
+dependencias que podria agregar:
+https://pub.dev/packages/cached_network_image
