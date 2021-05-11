@@ -1,3 +1,5 @@
+import 'package:themoviedb/class/Movies.dart'; // var imageAlternative
+
 class Actors {
   final String name;
   final String character;
@@ -15,7 +17,7 @@ class Actors {
     return Actors(
       name: actorsData['name'],
       character: actorsData['character'],
-      image: actorsData['image'],
+      image: actorsData['image'] ?? imageAlternative,
       order: actorsData['order'],
       creditId: actorsData['credit_id'],
     );

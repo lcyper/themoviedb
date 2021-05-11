@@ -13,7 +13,14 @@ const String apiKey = '0e685fd77fb3d76874a3ac26e0db8a4b';
 const String baseUrlImage =
     'https://www.themoviedb.org/t/p/w600_and_h900_bestv2';
 
-final Map cacheDataApi = {}; //aca se almacena el cache de peliculas
+const String imageAlternative =
+    'https://www.themoviedb.org/assets/2/apple-touch-icon-cfba7699efe7a742de25c28e08c38525f19381d31087c69e89d6bcb8e3c0ddfa.png';
+
+final Map cacheDataApi = {
+  'favorite': Map<int, Movies>.from({}),
+}; //aca se almacena el cache de peliculas
+//cambiar esto, hay q traer los datos con shared preferences y de inicio este inicializado
+// cacheDataApi['favorite'] = [];
 
 class Movies {
   final String title;
@@ -26,19 +33,22 @@ class Movies {
   final bool adult;
   final DateTime releaseDate;
   List<Actors> actors;
+  bool favorite;
+  String trailerId;
 
-  Movies({
-    this.adult,
-    this.title,
-    this.description,
-    this.gender,
-    this.posterPath,
-    this.backdropPath,
-    this.voteAverage,
-    this.id,
-    this.releaseDate,
-    this.actors,
-  });
+  Movies(
+      {this.adult,
+      this.title,
+      this.description,
+      this.gender,
+      this.posterPath,
+      this.backdropPath,
+      this.voteAverage,
+      this.id,
+      this.releaseDate,
+      this.actors,
+      this.favorite,
+      this.trailerId});
 
   // _pref()async => await SharedPreferences preferences;
 
@@ -46,11 +56,12 @@ class Movies {
     String title = json['title'] ?? json['original_title'];
     String description = json['overview'];
     List<String> gender = _setGenres(json['genre_ids']);
-    String posterPath =
-        json['poster_path'] != null ? baseUrlImage + json['poster_path'] : null;
+    String posterPath = json['poster_path'] != null
+        ? baseUrlImage + json['poster_path']
+        : imageAlternative; //si no viene la imagen se usa una alternativa
     String backdropPath = json['backdrop_path'] != null
         ? baseUrlImage + json['backdrop_path']
-        : null;
+        : imageAlternative;
     String voteAverage = json['vote_average'].toString();
     String id = json['id'].toString();
     bool adult = json['adult'];
@@ -68,6 +79,7 @@ class Movies {
       id: id,
       adult: adult,
       releaseDate: releaseDate,
+      favorite: false,
     );
   }
 
@@ -75,9 +87,15 @@ class Movies {
   Future getMovies({int page = 1, String url, String id}) async {
     // cuando se pide el detalle de una pelicula
     if (id != null) {
-      Map json = await makeRequest(url: 'movie/$id/credits');
-      _setActors(json);
-
+      if (this.actors == null) {
+        Map json = await makeRequest(url: 'movie/$id/credits');
+        _setActors(json);
+      }
+      if (this.trailerId == null) {
+        Map json = await makeRequest(url: 'movie/$id/videos');
+        _setTrailer(json);
+      }
+      _setFavorite(); //verifica y setea
       return this;
     }
     Map data;
@@ -118,7 +136,7 @@ class Movies {
     data = await makeRequest(page: 1, url: 'search/movie', query: inputValue);
     // cacheDataApi[url] = data;
     if (data['hasError'] == true) {
-      return [Movies()];
+      return [Movies()]; //x q?
     }
     List<Movies> list = List<Movies>.from(
         data['results'].map((element) => Movies.fromJson(element)));
@@ -137,8 +155,8 @@ class Movies {
     return genderNames;
   }
 
-  getActors() {
-    // this.actors;
+  getCacheDataApi() {
+    return cacheDataApi;
   }
 
   void _setActors(Map json) {
@@ -150,8 +168,35 @@ class Movies {
     });
     this.actors = List<Actors>.from(list);
   }
-}
 
+  void toggleFavorite() {
+    this.favorite = !favorite;
+    if (!cacheDataApi['favorite'].containsKey(int.parse(this.id))) {
+      //{this.id: this}
+      cacheDataApi['favorite'].addAll({int.parse(this.id): this});
+    } else {
+      cacheDataApi['favorite'].remove(int.parse(this.id));
+    }
+    print('favoritos.lenght: ' + cacheDataApi['favorite'].length.toString());
+  }
+
+  void _setFavorite() {
+    this.favorite = cacheDataApi['favorite'].containsKey(int.parse(this.id));
+  }
+
+  void _setTrailer(Map json) {
+    if (json['results'].isNotEmpty && this.trailerId == null) {
+      String trailerId;
+      json['results'].map((element) {
+        if (element['type'] == 'Trailer' && element['site'] == 'YouTube') {
+          // print('Movie Id: ' + element['key']);
+          return trailerId = element['key'];
+        }
+      }).toString();
+      this.trailerId = trailerId;
+    }
+  }
+}
 
 /////////////////////////////////////////
 // Funciones de ayuda para esta clase //
@@ -184,8 +229,8 @@ Future<Map<String, dynamic>> makeRequest(
 }
 
 Widget createListView(List<Movies> movies) {
-  if (movies[0].title == null) {
-    return Text('No hemos encontrado lo que buscaste.');
+  if (movies.length == 0 || movies[0].title == null) {
+    return Center(child: Text('Ups! esta vacio.'));
   }
   return ListView.builder(
     // scrollDirection: Axis.vertical,

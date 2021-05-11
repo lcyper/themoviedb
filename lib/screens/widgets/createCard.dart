@@ -18,6 +18,7 @@ class CreateCard extends StatelessWidget {
           bottom: 0.0,
         ),
         child: Card(
+          elevation: 2.0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(8.0),
@@ -38,15 +39,16 @@ class CreateCard extends StatelessWidget {
         ),
       );
 
-  Widget movieInfoOnly(BuildContext context, List<Widget> children,
-      {bool showLognTitle = true}) {
+  Widget movieInfoOnly(BuildContext context, List<Widget> children) {
     return Card(
+      elevation: 2.0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(8.0)),
       ),
       child: Column(
+        // scrollDirection: Axis.vertical,
         children: [
-          _cardMovieInfo(context, showLognTitle: showLognTitle),
+          _cardMovieInfo(context, isMovieInfo: true),
           for (var child in children)
             Padding(
               padding: EdgeInsets.all(15.0),
@@ -57,7 +59,7 @@ class CreateCard extends StatelessWidget {
     );
   }
 
-  Widget _cardMovieInfo(BuildContext context, {bool showLognTitle = false}) =>
+  Widget _cardMovieInfo(BuildContext context, {bool isMovieInfo = false}) =>
       Hero(
         transitionOnUserGestures: true,
         tag: "movieInfo" + movie.id,
@@ -76,7 +78,7 @@ class CreateCard extends StatelessWidget {
                     15.0,
                     15.0,
                   ),
-                  child: _moviePoster(),
+                  child: _moviePoster(isMovieInfo),
                 ),
               ),
               Padding(
@@ -99,10 +101,10 @@ class CreateCard extends StatelessWidget {
                           child: Text(
                             movie.title,
                             overflow: TextOverflow.fade,
-                            maxLines: showLognTitle ? 4 : 2,
+                            maxLines: isMovieInfo ? 4 : 2,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 19.0,
+                              fontSize: 18.0,
                               color: Colors.black,
                             ),
                           ),
@@ -128,7 +130,7 @@ class CreateCard extends StatelessWidget {
                         _outlinedBototn(
                           icon: Icons.star,
                           color: Colors.yellow[200],
-                          text: movie.voteAverage,
+                          text: movie.voteAverage, //+ '/10'
                         ),
                       ],
                     ),
@@ -138,6 +140,7 @@ class CreateCard extends StatelessWidget {
                         Movies().getGender(movie.gender),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 12.0),
                       ),
                     ),
                   ],
@@ -169,19 +172,55 @@ class CreateCard extends StatelessWidget {
         ),
       );
 
-  Widget _moviePoster() => ClipRRect(
+  Widget _moviePoster([bool isMovieInfo]) {
+    var image = Image.network(
+      movie.posterPath,
+      alignment: Alignment.center,
+      width: 90.0,
+      cacheWidth: 90,
+    );
+    return ClipRRect(
       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-      child: movie.posterPath != null
-          ? Image.network(
-              movie.posterPath,
-              alignment: Alignment.center,
-              width: 90.0,
-              cacheWidth: 90,
-            )
-          : Image.network(
-              'https://www.themoviedb.org/assets/2/apple-touch-icon-cfba7699efe7a742de25c28e08c38525f19381d31087c69e89d6bcb8e3c0ddfa.png',
-              alignment: Alignment.bottomCenter,
-              width: 90.0,
-              cacheWidth: 90,
-            ));
+      child: isMovieInfo ? ImageOnMovieInfo(image: image, movie: movie) : image,
+    );
+  }
+}
+
+class ImageOnMovieInfo extends StatelessWidget {
+  const ImageOnMovieInfo({
+    Key key,
+    @required this.image,
+    @required this.movie,
+  }) : super(key: key);
+
+  final Image image;
+  final Movies movie;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      child: image,
+      onTap: () => showDialog(
+        barrierColor: Colors.black87,
+        context: context,
+        builder: (context) => AlertDialog(
+          elevation: 5.0,
+          contentPadding: EdgeInsets.zero,
+          // insetPadding: EdgeInsets.zero,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          // title: Text(movie.title),
+          content: Container(
+            // height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: InteractiveViewer(
+              child: Image.network(
+                movie.posterPath,
+                alignment: Alignment.center,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
