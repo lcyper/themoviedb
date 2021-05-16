@@ -7,8 +7,8 @@ Widget getMoviesPage(String url) => FutureBuilder(
           ? createListView(snapshot.data)
           : snapshot.hasError
               ? Center(
-                  child: Text(
-                      'Error: no se pudo acceder a los datos, comprueba el internet.'),
+                  child: Text(snapshot.error.toString()),
+                  // 'Error: no se pudo acceder a los datos, comprueba el internet.'
                 )
               : Center(child: CircularProgressIndicator()),
     );
