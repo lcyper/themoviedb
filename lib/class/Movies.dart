@@ -20,7 +20,7 @@ const String imageAlternative =
 // Future<SharedPreferences> _preferences = (() async => await preferences())();
 // final Map cacheDataApi = {};
 Map cacheDataApi = {
-  'favorite': Map<int, Movies>.from({}),
+  'favorite': Map<String, Movies>.from({}),
 }; //aca se almacena el cache de peliculas
 //cambiar esto, hay q traer los datos con shared preferences y de inicio este inicializado
 // cacheDataApi['favorite'] = [];

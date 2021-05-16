@@ -13,7 +13,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
     List<Movies> movies = [];
     favorites.forEach((key, value) => movies.add(value));
 
-
     return SafeArea(
       child: Scaffold(
         extendBody: true,
