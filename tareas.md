@@ -5,11 +5,11 @@ inicio - 30/3/2021
 fin - 11/5/2021
 
 tareas:
-#usar localstorage para guardar "CacheDataApi"
-
 #usar provider para favoritos
 
 #scroll infinito en la lista de peliculas
+
+#usar localstorage para guardar "CacheDataApi"
 
 #pagina detalle de la pelicula - popup del video de youtube
 
