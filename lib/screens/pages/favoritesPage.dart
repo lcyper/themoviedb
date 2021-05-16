@@ -9,14 +9,11 @@ class FavoritesPage extends StatefulWidget {
 class _FavoritesPageState extends State<FavoritesPage> {
   @override
   Widget build(BuildContext context) {
-    Map<int, Movies> favorites = Movies().getCacheDataApi()['favorite'];
+    Map<String, dynamic> favorites = Movies().getCacheDataApi()['favorite'];
     List<Movies> movies = [];
     favorites.forEach((key, value) => movies.add(value));
-    print(movies);
-    // List<Movies>.from();
-    // List<Movies> movies = Movies().getCacheDataApi()['favorite'];
-    // List<Movies> movies;
-    // Movies().getMovies(id: movie.id, buildContext:context)
+
+
     return SafeArea(
       child: Scaffold(
         extendBody: true,
