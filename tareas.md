@@ -5,7 +5,9 @@ inicio - 30/3/2021
 fin - 11/5/2021
 
 tareas:
-#usar shared_preferences para guardar "CacheDataApi"
+#usar localstorage para guardar "CacheDataApi"
+
+#usar provider para favoritos
 
 #scroll infinito en la lista de peliculas
 
@@ -13,20 +15,16 @@ tareas:
 
 #implementar sharedPreferences: - guardar las peliculas - actualizar las peliculas si hay internet(inicio) o si el usuario deliza hacia abajo - guardar las peliculas favoritas
 #implementar provider con las peliculas favoritas, como manejar eso?
-#crear pagina de favoritos - boton para ir a la pagina - poder agregar y eliminar de la lista
+#pagina de favoritos - deslizar al costado para eliminar de la lista
 
 #crear una paleta de colores (color.primary) como variables globales
 #arreglar home, FloatinBottonAction FAB shape: CircularNotchedRectangle() no funciona?
 
-Crear un historial de pelis buscadas, solo texto de busqueda como un autocompletado
+#Crear un historial de pelis buscadas, solo texto de busqueda como un autocompletado
 
-implementar helpers handleError en movie?
+#implementar helpers handleError en movie?
 
-#pagina detalle
--genero
--titulo
--descripcion
--foto
+#refactorizar el codigo
 
 clases:
 
