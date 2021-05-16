@@ -1,22 +1,25 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:themoviedb/class/Actors.dart';
 // import 'package:themoviedb/helpers/helpers.dart'; //handleError
-import 'package:themoviedb/helpers/shared_preferences.dart';
 import 'package:themoviedb/screens/widgets/createCard.dart';
 
 // 'https://api.themoviedb.org/3/movie/550?api_key=0e685fd77fb3d76874a3ac26e0db8a4b';
 const String baseUrl = 'https://api.themoviedb.org/3/';
 const String apiKey = '0e685fd77fb3d76874a3ac26e0db8a4b';
 // https://api.themoviedb.org/3/movie/popular?api_key=0e685fd77fb3d76874a3ac26e0db8a4b&language=es
-const String baseUrlImage =
-    'https://www.themoviedb.org/t/p/w600_and_h900_bestv2';
+// const String baseUrlImage =
+//     'https://www.themoviedb.org/t/p/w600_and_h900_bestv2';
+const String baseUrlImage = 'https://image.tmdb.org/t/p/w500';
 
 const String imageAlternative =
     'https://www.themoviedb.org/assets/2/apple-touch-icon-cfba7699efe7a742de25c28e08c38525f19381d31087c69e89d6bcb8e3c0ddfa.png';
 
-final Map cacheDataApi = {
+// Future<SharedPreferences> _preferences = (() async => await preferences())();
+// final Map cacheDataApi = {};
+Map cacheDataApi = {
   'favorite': Map<int, Movies>.from({}),
 }; //aca se almacena el cache de peliculas
 //cambiar esto, hay q traer los datos con shared preferences y de inicio este inicializado
@@ -49,8 +52,6 @@ class Movies {
       this.actors,
       this.favorite,
       this.trailerId});
-
-  // _pref()async => await SharedPreferences preferences;
 
   factory Movies.fromJson(Map json) {
     String title = json['title'] ?? json['original_title'];
@@ -85,20 +86,32 @@ class Movies {
 
   // clase de llamada principal, maneja todo.
   Future getMovies({int page = 1, String url, String id}) async {
+    final SharedPreferences _preferences =
+        await SharedPreferences.getInstance();
+    if (cacheDataApi.length == 1) {
+      var cacheDataString = _preferences.getString('cacheDataApi');
+      if (cacheDataString != null) {
+        cacheDataApi = json.decode(cacheDataString);
+      }
+    }
+    // cacheDataApi;
+
     // cuando se pide el detalle de una pelicula
     if (id != null) {
-      if (this.actors == null) {
-        Map json = await makeRequest(url: 'movie/$id/credits');
-        _setActors(json);
-      }
-      if (this.trailerId == null) {
-        Map json = await makeRequest(url: 'movie/$id/videos');
-        _setTrailer(json);
+      // print(this.actors.toString() + ' | ' + this.trailerId.toString());
+      if (this.actors == null && this.trailerId == null) {
+        Map jsonActorsData = await makeRequest(url: 'movie/$id/credits');
+        _setActors(jsonActorsData);
+
+        Map jsonTrailerData = await makeRequest(url: 'movie/$id/videos');
+        _setTrailer(jsonTrailerData);
       }
       _setFavorite(); //verifica y setea
       return this;
     }
+
     Map data;
+
     if (cacheDataApi['genres'] == null) {
       Map genresList = await makeRequest(url: 'genre/movie/list');
       if (genresList['hasError'] != null) {
@@ -106,7 +119,7 @@ class Movies {
         // return handleErrorWidget(genresList);
       }
       genresList = Map.fromIterable(genresList['genres'],
-          key: (e) => e['id'], value: (e) => e['name']);
+          key: (e) => e['id'].toString(), value: (e) => e['name']);
       cacheDataApi['genres'] = genresList;
     }
 
@@ -116,6 +129,10 @@ class Movies {
     } else {
       data = cacheDataApi[url];
     }
+    // final SharedPreferences _preferences =
+    //     await SharedPreferences.getInstance();
+    await _preferences.setString('cacheDataApi', json.encode(cacheDataApi));
+
     List<Movies> list = List<Movies>.from(
         data['results'].map((element) => Movies.fromJson(element)));
     return list;
@@ -129,7 +146,7 @@ class Movies {
       // return handleErrorWidget(genresList);
       // }
       genresList = Map.fromIterable(genresList['genres'],
-          key: (e) => e['id'], value: (e) => e['name']);
+          key: (e) => e['id'].toString(), value: (e) => e['name']);
       cacheDataApi['genres'] = genresList;
     }
 
@@ -171,17 +188,17 @@ class Movies {
 
   void toggleFavorite() {
     this.favorite = !favorite;
-    if (!cacheDataApi['favorite'].containsKey(int.parse(this.id))) {
+    if (!cacheDataApi['favorite'].containsKey(this.id)) {
       //{this.id: this}
-      cacheDataApi['favorite'].addAll({int.parse(this.id): this});
+      cacheDataApi['favorite'].addAll({this.id: this});
     } else {
-      cacheDataApi['favorite'].remove(int.parse(this.id));
+      cacheDataApi['favorite'].remove(this.id);
     }
     print('favoritos.lenght: ' + cacheDataApi['favorite'].length.toString());
   }
 
   void _setFavorite() {
-    this.favorite = cacheDataApi['favorite'].containsKey(int.parse(this.id));
+    this.favorite = cacheDataApi['favorite'].containsKey(this.id);
   }
 
   void _setTrailer(Map json) {
@@ -201,10 +218,14 @@ class Movies {
 /////////////////////////////////////////
 // Funciones de ayuda para esta clase //
 ///////////////////////////////////////
-Future<Map<String, dynamic>> makeRequest(
-    {int page = 1, String url, String language = 'es', String query}) async {
+Future<Map<String, dynamic>> makeRequest({
+  int page = 1,
+  @required String url,
+  String language = 'es',
+  String query,
+}) async {
   // implementar el cache de la peticion
-
+  // print(baseUrl + url);
   try {
     // print('URL: ' + baseUrl + url);
     var response = await Dio().get(
@@ -218,6 +239,7 @@ Future<Map<String, dynamic>> makeRequest(
     );
     if (response.statusMessage == 'OK') {
       // _cache = response.data;
+      print(response.requestOptions.path);
       return response.data;
     } else {
       return {'statusMessage': response.statusMessage};
@@ -244,7 +266,7 @@ Widget createListView(List<Movies> movies) {
 List _setGenres(List genresList) {
   List<String> genresListByName = List<String>.from(
     genresList.map((id) {
-      return cacheDataApi['genres'][id];
+      return cacheDataApi['genres'][id.toString()];
     }),
   );
   return genresListByName; // ['Accion', 'Drama'];
