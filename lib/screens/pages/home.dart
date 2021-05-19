@@ -15,30 +15,33 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       body: Center(
         child: _selectedTabIndex == 0 ? MoviesTab() : FindMoviesTab(),
       ),
       bottomNavigationBar: _buildBottomNavigationBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'Favoritos',
-        elevation: 3.0,
-        mini: true,
-        backgroundColor: Colors.red,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => FavoritesPage(),
-            ),
-          );
-        },
-        child: Icon(
-          Icons.favorite,
-          size: 30.0,
-          // color: Colors.white,
-        ),
-      ),
+      floatingActionButton: _selectedTabIndex == 0
+          ? FloatingActionButton(
+              tooltip: 'Favoritos',
+              elevation: 3.0,
+              mini: true,
+              backgroundColor: Colors.red,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FavoritesPage(),
+                  ),
+                );
+              },
+              child: Icon(
+                Icons.favorite,
+                size: 26.0,
+                color: Colors.white,
+              ),
+            )
+          : Container(),
     );
   }
 
@@ -71,19 +74,19 @@ class _HomeState extends State<Home> {
             items: [
               BottomNavigationBarItem(
                 icon: Icon(Icons.movie_outlined),
-                label: 'pelis',
+                label: 'Peliculas',
                 // backgroundColor: Colors.red,
                 activeIcon: Icon(Icons.movie),
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.find_in_page_outlined),
-                activeIcon: Icon(Icons.find_in_page),
-                label: 'buscar',
+                icon: Icon(Icons.search_rounded),
+                activeIcon: Icon(Icons.search_rounded),
+                label: 'Buscar',
               )
             ],
             selectedFontSize: 16.0,
             currentIndex: _selectedTabIndex,
-            selectedItemColor: Colors.yellow[700],
+            selectedItemColor: Colors.yellow[900],
             elevation: 1.0,
             iconSize: 30.0,
             unselectedItemColor: Colors.grey[400],

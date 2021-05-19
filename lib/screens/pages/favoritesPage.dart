@@ -18,6 +18,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.grey[200],
         extendBody: true,
         // extendBodyBehindAppBar: true,
         // backgroundColor: Colors.transparent,

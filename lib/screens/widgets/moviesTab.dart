@@ -35,7 +35,7 @@ class _MoviesTabState extends State<MoviesTab> {
 
   TabBar _buildTabBar() {
     return TabBar(
-      indicatorColor: Colors.yellow,
+      indicatorColor: Colors.yellow[900],
       indicatorWeight: 5.0,
       indicatorPadding: EdgeInsets.only(
         left: 50.0,

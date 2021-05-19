@@ -128,8 +128,8 @@ class CreateCard extends StatelessWidget {
                             text: movie.releaseDate.year.toString(),
                           ),
                         _outlinedBototn(
-                          icon: Icons.star,
-                          color: Colors.yellow[200],
+                          icon: Icons.star_rounded,
+                          color: Colors.yellow[900],
                           text: movie.voteAverage, //+ '/10'
                         ),
                       ],

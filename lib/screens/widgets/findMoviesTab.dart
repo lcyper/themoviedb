@@ -10,10 +10,8 @@ class _FindMoviesTabState extends State<FindMoviesTab> {
   Future<List<Movies>> _movieList;
   final TextEditingController _controler = TextEditingController();
   List<Widget> _noDataYet = [
-    Text('las peliculas apareceran aca.'),
-    Center(
-      child: CircularProgressIndicator(),
-    ),
+    Text('Las peliculas apareceran aca.'),
+    CircularProgressIndicator(),
   ];
   int _indexNoDataYet = 0;
 
@@ -23,13 +21,13 @@ class _FindMoviesTabState extends State<FindMoviesTab> {
       padding: const EdgeInsets.all(13.0),
       child: Column(
         children: [
-          Text('Te gustaria buscar una peli?'),
           Form(
             child: TextFormField(
+              cursorColor: Colors.yellow[900],
               controller: _controler,
               onEditingComplete: () {
                 FocusScope.of(context).unfocus();
-                if (_controler.text.length > 1) {
+                if (_controler.text.length >= 1) {
                   setState(() {
                     _indexNoDataYet = 1;
                     _movieList = Movies().lookByQuerry(_controler.text);
@@ -44,7 +42,10 @@ class _FindMoviesTabState extends State<FindMoviesTab> {
               },
               autofocus: true,
               decoration: InputDecoration(
-                hintText: 'Nombre de la peli?',
+                hintText: 'Nombre de la pelicula',
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.yellow[900], width: 3.0),
+                ),
                 suffixIcon: _controler.text.length > 0
                     ? IconButton(
                         icon: Icon(
@@ -70,7 +71,7 @@ class _FindMoviesTabState extends State<FindMoviesTab> {
                     : Expanded(
                         child: createListView(snapshot.data),
                       )
-                : _noDataYet[_indexNoDataYet],
+                : Expanded(child: Center(child: _noDataYet[_indexNoDataYet])),
           ),
         ],
       ),
