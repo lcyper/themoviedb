@@ -20,7 +20,7 @@ const String imageAlternative =
 // Future<SharedPreferences> _preferences = (() async => await preferences())();
 // final Map cacheDataApi = {};
 Map cacheDataApi = {
-  'favorite': Map<String, Movies>.from({}),
+  'favorite': Map<String, dynamic>.from({}),
 }; //aca se almacena el cache de peliculas
 //cambiar esto, hay q traer los datos con shared preferences y de inicio este inicializado
 // cacheDataApi['favorite'] = [];
@@ -54,6 +54,29 @@ class Movies {
       this.trailerId});
 
   factory Movies.fromJson(Map json) {
+    //si reconstruye de json para favoritos
+    if (json['favorite'] == true) {
+      List<Actors> actors = [];
+      if (json['actors'] != null && json['actors'].length > 0) {
+        actors = List<Actors>.from(
+            json['actors'].map((actor) => Actors.fromJson(actor)));
+      }
+      return Movies(
+        title: json['title'],
+        description: json['description'],
+        gender: List<String>.from(json['gender']),
+        posterPath: json['posterPath'],
+        backdropPath: json['backdropPath'],
+        voteAverage: json['voteAverage'],
+        id: json['id'],
+        adult: json['adult'],
+        releaseDate: DateTime.parse(json['releaseDate']),
+        favorite: json['favorite'],
+        trailerId: json['trailerId'],
+        actors: actors ?? json['actors'],
+      );
+    }
+
     String title = json['title'] ?? json['original_title'];
     String description = json['overview'];
     List<String> gender = _setGenres(json['genre_ids']);
@@ -94,11 +117,9 @@ class Movies {
         cacheDataApi = json.decode(cacheDataString);
       }
     }
-    // cacheDataApi;
 
     // cuando se pide el detalle de una pelicula
     if (id != null) {
-      // print(this.actors.toString() + ' | ' + this.trailerId.toString());
       if (this.actors == null && this.trailerId == null) {
         Map jsonActorsData = await makeRequest(url: 'movie/$id/credits');
         _setActors(jsonActorsData);
@@ -107,6 +128,9 @@ class Movies {
         _setTrailer(jsonTrailerData);
       }
       _setFavorite(); //verifica y setea
+      final SharedPreferences _preferences =
+          await SharedPreferences.getInstance();
+      await _preferences.setString('cacheDataApi', json.encode(cacheDataApi));
       return this;
     }
 
@@ -129,8 +153,7 @@ class Movies {
     } else {
       data = cacheDataApi[url];
     }
-    // final SharedPreferences _preferences =
-    //     await SharedPreferences.getInstance();
+
     await _preferences.setString('cacheDataApi', json.encode(cacheDataApi));
 
     List<Movies> list = List<Movies>.from(
@@ -151,7 +174,6 @@ class Movies {
     }
 
     data = await makeRequest(page: 1, url: 'search/movie', query: inputValue);
-    // cacheDataApi[url] = data;
     if (data['hasError'] == true) {
       return [Movies()]; //x q?
     }
@@ -186,15 +208,37 @@ class Movies {
     this.actors = List<Actors>.from(list);
   }
 
-  void toggleFavorite() {
+  void toggleFavorite() async {
     this.favorite = !favorite;
     if (!cacheDataApi['favorite'].containsKey(this.id)) {
       //{this.id: this}
-      cacheDataApi['favorite'].addAll({this.id: this});
+      // cacheDataApi['favorite'].addAll({this.id: this});
+      cacheDataApi['favorite'].addAll({this.id: _toJSONEncodable(this)});
     } else {
       cacheDataApi['favorite'].remove(this.id);
     }
+    final SharedPreferences _preferences =
+        await SharedPreferences.getInstance();
+    await _preferences.setString('cacheDataApi', json.encode(cacheDataApi));
     print('favoritos.lenght: ' + cacheDataApi['favorite'].length.toString());
+  }
+
+  Map _toJSONEncodable(Movies movie) {
+    Map<String, dynamic> map = {
+      'title': movie.title,
+      'description': movie.description,
+      'gender': movie.gender,
+      'posterPath': movie.posterPath,
+      'backdropPath': movie.backdropPath,
+      'voteAverage': movie.voteAverage,
+      'id': movie.id,
+      'adult': movie.adult,
+      'releaseDate': movie.releaseDate.toString(),
+      'favorite': movie.favorite,
+      'trailerId': movie.trailerId,
+      'actors': Actors().toJSONEncodable(movie.actors),
+    };
+    return map;
   }
 
   void _setFavorite() {
@@ -224,8 +268,6 @@ Future<Map<String, dynamic>> makeRequest({
   String language = 'es',
   String query,
 }) async {
-  // implementar el cache de la peticion
-  // print(baseUrl + url);
   try {
     // print('URL: ' + baseUrl + url);
     var response = await Dio().get(
@@ -238,7 +280,6 @@ Future<Map<String, dynamic>> makeRequest({
       },
     );
     if (response.statusMessage == 'OK') {
-      // _cache = response.data;
       print(response.requestOptions.path);
       return response.data;
     } else {
@@ -246,7 +287,6 @@ Future<Map<String, dynamic>> makeRequest({
     }
   } catch (e) {
     return {'message': e.message, 'hasError': true};
-    // return (e);
   }
 }
 

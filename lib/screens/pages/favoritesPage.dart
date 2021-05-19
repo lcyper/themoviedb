@@ -11,7 +11,10 @@ class _FavoritesPageState extends State<FavoritesPage> {
   Widget build(BuildContext context) {
     Map<String, dynamic> favorites = Movies().getCacheDataApi()['favorite'];
     List<Movies> movies = [];
-    favorites.forEach((key, value) => movies.add(value));
+    favorites.forEach((key, value) {
+      Movies movie = Movies.fromJson(value);
+      movies.add(movie);
+    });
 
     return SafeArea(
       child: Scaffold(

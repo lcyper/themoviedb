@@ -22,4 +22,19 @@ class Actors {
       creditId: actorsData['credit_id'],
     );
   }
+  List toJSONEncodable(List<Actors> actors) {
+    // print(this);
+    List list = actors.map((a) {
+      
+      Map<String, dynamic> map = {
+        'name': a.name,
+        'character': a.character,
+        'image': a.image,
+        'order': a.order,
+        'creditId': a.creditId,
+      };
+      return map;
+    }).toList();
+    return list;
+  }
 }
