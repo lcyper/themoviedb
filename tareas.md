@@ -14,9 +14,9 @@ tareas:
 
 #pagina detalle de la pelicula - popup del video de youtube
 
-#implementar sharedPreferences: - guardar las peliculas - actualizar las peliculas si hay internet(inicio) o si el usuario deliza hacia abajo - guardar las peliculas favoritas
-#implementar provider con las peliculas favoritas, como manejar eso?
-#pagina de favoritos - deslizar al costado para eliminar de la lista
+#implementar sharedPreferences:  - actualizar las peliculas si hay internet(inicio) o si el usuario deliza hacia abajo - guardar las peliculas favoritas
+
+#cached images https://flutter.dev/docs/cookbook/images/cached-images
 
 #crear una paleta de colores (color.primary) como variables globales
 #arreglar home, FloatinBottonAction FAB shape: CircularNotchedRectangle() no funciona?

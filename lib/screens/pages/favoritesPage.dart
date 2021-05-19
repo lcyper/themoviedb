@@ -21,15 +21,15 @@ class _FavoritesPageState extends State<FavoritesPage> {
         backgroundColor: Colors.grey[200],
         extendBody: true,
         // extendBodyBehindAppBar: true,
-        // backgroundColor: Colors.transparent,
         appBar: AppBar(
-            title: Text('Favoritas'),
+            title: Text('Peliculas Favoritas'),
             centerTitle: true,
             automaticallyImplyLeading: false,
             // toolbarHeight: 40.0,
             // foregroundColor: Colors.black,
             elevation: 0.0,
-            backgroundColor: Colors.transparent,
+            // backgroundColor: Colors.transparent,
+            backgroundColor: Colors.black12,
             leading: Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
@@ -48,7 +48,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 ),
               ),
             )),
-        body: createListView(movies),
+        body: createListView(movies, type: "favorite"),
       ),
     );
   }
