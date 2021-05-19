@@ -72,7 +72,7 @@ class _MovieCardPageState extends State<MovieCardPage> {
 
   Widget _buildWidget(BuildContext context) {
     final List<Widget> widgets = [
-      MovieDescription(movie: widget.movie),
+      if (widget.movie.description != "") MovieDescription(movie: widget.movie),
       MovieInfo(movie: widget.movie),
     ];
     return ListView(
