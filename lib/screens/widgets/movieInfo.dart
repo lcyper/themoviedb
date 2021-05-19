@@ -125,7 +125,16 @@ class _MovieInfoState extends State<MovieInfo> {
                       : Container(),
                   IconButton(
                     onPressed: () => setState(() {
+                      List<String> message = [
+                        "Se a agregado a Favoritos",
+                        "Se a eliminado de Favoritos"
+                      ];
                       widget.movie.toggleFavorite();
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                            message[widget.movie.favorite == true ? 0 : 1]),
+                        duration: Duration(seconds: 2),
+                      ));
                     }),
                     icon: widget.movie.favorite
                         ? Icon(
