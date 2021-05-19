@@ -70,7 +70,9 @@ class Movies {
         voteAverage: json['voteAverage'],
         id: json['id'],
         adult: json['adult'],
-        releaseDate: DateTime.parse(json['releaseDate']),
+        releaseDate: json['releaseDate'] != null
+            ? DateTime.parse(json['releaseDate'])
+            : null,
         favorite: json['favorite'],
         trailerId: json['trailerId'],
         actors: actors ?? json['actors'],
@@ -89,9 +91,10 @@ class Movies {
     String voteAverage = json['vote_average'].toString();
     String id = json['id'].toString();
     bool adult = json['adult'];
-    DateTime releaseDate = json['release_date'] != null
-        ? DateTime.parse(json['release_date'])
-        : null;
+    DateTime releaseDate =
+        json['release_date'] != "" && json['release_date'] != null
+            ? DateTime.parse(json['release_date'])
+            : null;
 
     return Movies(
       title: title,
