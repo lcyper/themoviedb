@@ -29,70 +29,70 @@ class _MovieInfoState extends State<MovieInfo> {
           //   ),
           // );
 
-          Widget _actors() => Column(
-                children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      _isActorName ? 'Actores:' : 'Personajes:',
-                      textScaleFactor: 1.6,
-                      // textAlign: TextAlign.left,
-                      style: TextStyle(fontWeight: FontWeight.bold),
+          Widget _actors() => widget.movie.actors.length >= 1
+              ? Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        _isActorName ? 'Actores:' : 'Personajes:',
+                        textScaleFactor: 1.6,
+                        // textAlign: TextAlign.left,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  ),
-                  widget.movie.actors.length > 1
-                      ? SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            // mainAxisAlignment: MainAxisAlignment.end,
-                            children: widget.movie.actors
-                                .map(
-                                  (actor) => Column(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: _toggleActorName,
-                                        child: Container(
-                                          // color: Colors.red,
-                                          margin: EdgeInsets.only(
-                                            right: 12.0,
-                                            left: 12.0,
-                                          ),
-                                          width: 80,
-                                          height: 120,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            image: DecorationImage(
-                                              alignment: Alignment.center,
-                                              image: NetworkImage(actor.image),
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // mainAxisAlignment: MainAxisAlignment.end,
+                        children: widget.movie.actors
+                            .map(
+                              (actor) => Column(
+                                children: [
+                                  GestureDetector(
+                                    onTap: _toggleActorName,
+                                    child: Container(
+                                      // color: Colors.red,
+                                      margin: EdgeInsets.only(
+                                        right: 12.0,
+                                        left: 12.0,
+                                      ),
+                                      width: 80,
+                                      height: 120,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                          alignment: Alignment.center,
+                                          image: NetworkImage(actor.image),
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                      SizedBox(
-                                        // height: 90.0,
-                                        width: 90.0,
-                                        child: Text(
-                                          _isActorName
-                                              ? actor.name
-                                              : actor.character
-                                                  .replaceAll("/", " "),
-                                          textAlign: TextAlign.center,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.visible,
-                                          style: TextStyle(fontSize: 16.0),
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
-                                )
-                                .toList(),
-                          ),
-                        )
-                      : Container(),
-                ],
-              );
+                                  SizedBox(
+                                    // height: 90.0,
+                                    width: 90.0,
+                                    child: Text(
+                                      _isActorName
+                                          ? actor.name
+                                          : actor.character
+                                              .replaceAll("/", " "),
+                                      textAlign: TextAlign.center,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.visible,
+                                      style: TextStyle(fontSize: 16.0),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                  ],
+                )
+              : Container();
 
           Widget _trailerAndFavorite() => Row(
                 // direction: Axis.horizontal,
