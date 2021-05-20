@@ -70,7 +70,7 @@ class Movies {
         voteAverage: json['voteAverage'],
         id: json['id'],
         adult: json['adult'],
-        releaseDate: json['releaseDate'] != null
+        releaseDate: json['releaseDate'] != "null"
             ? DateTime.parse(json['releaseDate'])
             : null,
         favorite: json['favorite'],
@@ -303,7 +303,6 @@ Widget createListView(List<Movies> movies, {String type}) {
     padding: const EdgeInsets.all(8),
     itemCount: movies.length,
     itemBuilder: (context, index) {
-
       if (type == "favorite") {
         //es caso de que sea en la pagina de favoritos
         return Dismissible(
