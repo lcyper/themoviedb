@@ -323,7 +323,8 @@ Widget createListView(List<Movies> movies, {String type}) {
               Movies().toggleFavorite(id: movies[index].id);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(movies[index].title + ' eliminada'),
+                  content:
+                      Text(movies[index].title + ' eliminada de Favoritos'),
                   duration: Duration(seconds: 2),
                 ),
               );
