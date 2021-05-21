@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:themoviedb/class/Actors.dart';
 // import 'package:themoviedb/helpers/helpers.dart'; //handleError
@@ -261,6 +262,16 @@ class Movies {
       }).toString();
       this.trailerId = trailerId;
     }
+  }
+
+  get getFavoriteMovies {
+    Map<String, dynamic> favorites = cacheDataApi['favorite'];
+    List<Movies> movies = [];
+    favorites.forEach((key, value) {
+      Movies movie = Movies.fromJson(value);
+      movies.add(movie);
+    });
+    return movies;
   }
 }
 
