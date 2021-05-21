@@ -21,28 +21,32 @@ class _HomeState extends State<Home> {
       ),
       bottomNavigationBar: _buildBottomNavigationBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: _selectedTabIndex == 0
-          ? FloatingActionButton(
-              tooltip: 'Favoritos',
-              elevation: 3.0,
-              mini: true,
-              backgroundColor: Colors.red,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FavoritesPage(),
-                  ),
-                );
-              },
-              child: Icon(
-                Icons.favorite,
-                size: 26.0,
-                color: Colors.white,
-              ),
-            )
-          : Container(),
+      floatingActionButton: _buildFloatingActionButton(context),
     );
+  }
+
+  FloatingActionButton _buildFloatingActionButton(BuildContext context) {
+    return _selectedTabIndex == 0
+        ? FloatingActionButton(
+            tooltip: 'Favoritos',
+            elevation: 3.0,
+            mini: true,
+            backgroundColor: Colors.red,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FavoritesPage(),
+                ),
+              );
+            },
+            child: Icon(
+              Icons.favorite,
+              size: 26.0,
+              color: Colors.white,
+            ),
+          )
+        : Container();
   }
 
   Widget _buildBottomNavigationBar() {
