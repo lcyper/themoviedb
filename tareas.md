@@ -8,11 +8,13 @@ fininalizada -
 tareas:
 #usar provider para favoritos
 
-#scroll infinito en la lista de peliculas
+#scroll infinito en la lista de peliculas https://pub.dev/packages/infinite_scroll_pagination
 
-#usar localstorage para guardar "CacheDataApi"?
+#error cuando se borra un elemento de favoritos usando un Dismissible (problemas con el index del listview)
 
 #pagina detalle de la pelicula - popup del video de youtube
+
+#usar localstorage para guardar "CacheDataApi"?
 
 #implementar sharedPreferences:  - actualizar las peliculas si hay internet(inicio) o si el usuario deliza hacia abajo - guardar las peliculas favoritas
 
@@ -22,6 +24,8 @@ tareas:
 #arreglar home, FloatinBottonAction FAB shape: CircularNotchedRectangle() no funciona?
 
 #Crear un historial de pelis buscadas, solo texto de busqueda como un autocompletado
+
+#flutter_native_splash pub dev package
 
 #implementar helpers handleError en movie?
 
