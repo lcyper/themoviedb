@@ -6,13 +6,15 @@ cumple requerimientos - 11/5/2021
 fininalizada - 
 
 tareas:
-#usar provider para favoritos
+#al abrir la app si tiene internet descargar los datos de internet, sino tiene usar sharedPreferences
+
+#al tirar para abajo en la pantalla principal que se actualicen los datos (tambien cuando se entra a la app y tiene internet)
+
 
 #scroll infinito en la lista de peliculas https://pub.dev/packages/infinite_scroll_pagination
 
 #error cuando se borra un elemento de favoritos usando un Dismissible (problemas con el index del listview)
 
-#al tirar para abajo en la pantalla principal que se actualicen los datos (tambien cuando se entra a la app y tiene internet)
 
 #pagina detalle de la pelicula - popup del video de youtube
 
