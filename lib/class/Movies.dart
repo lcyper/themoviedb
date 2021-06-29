@@ -1,12 +1,8 @@
-import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:themoviedb/class/Actors.dart';
-import 'package:themoviedb/provider/cacheApp.dart';
 // import 'package:themoviedb/helpers/helpers.dart'; //handleError
-import 'package:themoviedb/screens/widgets/createCard.dart';
 
 // 'https://api.themoviedb.org/3/movie/550?api_key=0e685fd77fb3d76874a3ac26e0db8a4b';
 const String baseUrl = 'https://api.themoviedb.org/3/';
@@ -117,10 +113,7 @@ class Movies {
 
   // clase de llamada principal, maneja todo.
   Future getMovies(
-      {int page = 1,
-      @required String url,
-      String id,
-      @required Map cacheDataApi}) async {
+      {int page = 1, String url, String id, @required Map cacheDataApi}) async {
     // final SharedPreferences _preferences =
     //     await SharedPreferences.getInstance();
     // if (cacheDataApi.length == 1) {
@@ -331,51 +324,6 @@ Future<Map<String, dynamic>> makeRequest({
   } catch (e) {
     return {'message': e.message, 'hasError': true};
   }
-}
-
-Widget createListView(List<Movies> movies, {String type}) {
-  if (movies.length == 0 || movies[0].title == null) {
-    return Center(child: Text('Ups! vacio.'));
-  }
-  return ListView.builder(
-    padding: const EdgeInsets.all(8),
-    itemCount: movies.length,
-    itemBuilder: (context, index) {
-      if (type == "favorite") {
-        //es caso de que sea en la pagina de favoritos
-        return Dismissible(
-          key: Key(index.toString()),
-          child: CreateCard(movie: movies[index]),
-          background: Container(
-            alignment: Alignment.centerRight,
-            padding: EdgeInsets.only(right: 15.0, top: 20.0),
-            child: Icon(
-              Icons.delete,
-              color: Colors.red,
-              size: 30.0,
-            ),
-          ),
-          direction: DismissDirection.endToStart,
-          onDismissed: (direction) {
-            if (direction == DismissDirection.endToStart) {
-              Provider.of<CacheApp>(context, listen: false).toggleFavorite =
-                  movies[index];
-              // Movies().toggleFavorite(id: movies[index].id);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content:
-                      Text(movies[index].title + ' eliminada de Favoritos'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
-              return movies.removeAt(index);
-            }
-          },
-        );
-      }
-      return CreateCard(movie: movies[index]);
-    },
-  );
 }
 
 List _setGenres(List genresList, Map cacheDataApi) {

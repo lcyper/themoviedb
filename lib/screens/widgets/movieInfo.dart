@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
-import 'package:themoviedb/class/Movies.dart';
 import 'package:themoviedb/provider/cacheApp.dart';
+
+import 'package:themoviedb/class/Movies.dart';
 // import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class MovieInfo extends StatefulWidget {
@@ -135,7 +137,7 @@ class _MovieInfoState extends State<MovieInfo> {
                       "Se a agregado a Favoritos",
                       "Se a eliminado de Favoritos"
                     ];
-                    var favorite = Provider.of<CacheApp>(context, listen: false)
+                    Provider.of<CacheApp>(context, listen: false)
                         .toggleFavorite = widget.movie;
 
                     // toggleFavorite = widget.movie;
