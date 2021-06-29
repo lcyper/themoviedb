@@ -6,8 +6,6 @@ cumple requerimientos - 11/5/2021
 fininalizada - 
 
 tareas:
-#al abrir la app si tiene internet descargar los datos de internet, sino tiene usar sharedPreferences
-
 #al tirar para abajo en la pantalla principal que se actualicen los datos (tambien cuando se entra a la app y tiene internet)
 
 

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:themoviedb/class/Movies.dart';
+import 'package:themoviedb/helpers/is_internet.dart';
 
 class CacheApp with ChangeNotifier {
   SharedPreferences _preferences;
@@ -16,11 +17,16 @@ class CacheApp with ChangeNotifier {
 
   void setup() async {
     _preferences = await SharedPreferences.getInstance();
-
-    //en caso de no tener internet
     var cacheDataString = _preferences.getString('cacheDataApi');
-    if (cacheDataString != null) {
-      _cacheDataApi = json.decode(cacheDataString);
+    if (!await isInternet()) {
+      print("sin internet, usando SharedPreferences");
+      if (cacheDataString != null) {
+        _cacheDataApi = json.decode(cacheDataString);
+      }
+    } else {
+      print("trayendo datos de internet");
+      _cacheDataApi['favorite'] =
+          json.decode(cacheDataString)['favorite'] ?? {};
     }
     if (_cacheDataApi['genres'] == null) {
       _cacheDataApi['genres'] = await Movies().getGenresList();
@@ -33,12 +39,10 @@ class CacheApp with ChangeNotifier {
   set cacheDataApi(Map cacheDataApi) {
     _cacheDataApi = cacheDataApi;
     _preferences.setString('cacheDataApi', json.encode(cacheDataApi));
-    // json.encode(_cacheDataApi);
     notifyListeners();
   }
 
   List<Movies> get favoriteMovies {
-    // return Movies().getFavoriteMovies;
     Map favorites = _cacheDataApi['favorite'];
     List<Movies> movies = [];
     if (favorites != null) {
@@ -46,8 +50,6 @@ class CacheApp with ChangeNotifier {
         Movies movie = Movies.fromJson(value, _cacheDataApi);
         movies.add(movie);
       });
-    } else {
-      _cacheDataApi['favorite'] = {};
     }
     return movies;
   }
