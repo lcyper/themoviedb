@@ -25,7 +25,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  FloatingActionButton _buildFloatingActionButton(BuildContext context) {
+  Widget _buildFloatingActionButton(BuildContext context) {
     return _selectedTabIndex == 0
         ? FloatingActionButton(
             tooltip: 'Favoritos',
