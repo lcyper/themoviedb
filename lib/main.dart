@@ -12,9 +12,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: CacheApp(),
-      // builder: (context, child) => CacheApp().build(),
+    // return ChangeNotifierProvider.value(
+    return ChangeNotifierProvider<CacheApp>(
+      create: (context) => CacheApp(),
+      // lazy: false,
+      // value: CacheApp(),
+      // builder: (context, child) => CacheApp(),
 
       // MultiProvider(
       //   providers: [
