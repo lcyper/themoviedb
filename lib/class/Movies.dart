@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:themoviedb/class/Actors.dart';
+import 'package:themoviedb/provider/cacheApp.dart';
 // import 'package:themoviedb/helpers/helpers.dart'; //handleError
 import 'package:themoviedb/screens/widgets/createCard.dart';
 
@@ -20,9 +21,11 @@ const String imageAlternative =
 
 // Future<SharedPreferences> _preferences = (() async => await preferences())();
 // final Map cacheDataApi = {};
+/*
 Map cacheDataApi = {
   'favorite': Map<String, dynamic>.from({}),
 }; //aca se almacena el cache de peliculas
+*/
 //cambiar esto, hay q traer los datos con shared preferences y de inicio este inicializado
 // cacheDataApi['favorite'] = [];
 
@@ -40,21 +43,22 @@ class Movies {
   bool favorite;
   String trailerId;
 
-  Movies(
-      {this.adult,
-      this.title,
-      this.description,
-      this.gender,
-      this.posterPath,
-      this.backdropPath,
-      this.voteAverage,
-      this.id,
-      this.releaseDate,
-      this.actors,
-      this.favorite,
-      this.trailerId});
+  Movies({
+    this.adult,
+    this.title,
+    this.description,
+    this.gender,
+    this.posterPath,
+    this.backdropPath,
+    this.voteAverage,
+    this.id,
+    this.releaseDate,
+    this.actors,
+    this.favorite,
+    this.trailerId,
+  });
 
-  factory Movies.fromJson(Map json) {
+  factory Movies.fromJson(Map json, Map cacheDataApi) {
     //si reconstruye de json para favoritos
     if (json['favorite'] == true) {
       List<Actors> actors = [];
@@ -82,7 +86,7 @@ class Movies {
 
     String title = json['title'] ?? json['original_title'];
     String description = json['overview'];
-    List<String> gender = _setGenres(json['genre_ids']);
+    List<String> gender = _setGenres(json['genre_ids'], cacheDataApi);
     String posterPath = json['poster_path'] != null
         ? baseUrlImage + json['poster_path']
         : imageAlternative; //si no viene la imagen se usa una alternativa
@@ -112,15 +116,19 @@ class Movies {
   }
 
   // clase de llamada principal, maneja todo.
-  Future getMovies({int page = 1, String url, String id}) async {
-    final SharedPreferences _preferences =
-        await SharedPreferences.getInstance();
-    if (cacheDataApi.length == 1) {
-      var cacheDataString = _preferences.getString('cacheDataApi');
-      if (cacheDataString != null) {
-        cacheDataApi = json.decode(cacheDataString);
-      }
-    }
+  Future getMovies(
+      {int page = 1,
+      @required String url,
+      String id,
+      @required Map cacheDataApi}) async {
+    // final SharedPreferences _preferences =
+    //     await SharedPreferences.getInstance();
+    // if (cacheDataApi.length == 1) {
+    //   var cacheDataString = _preferences.getString('cacheDataApi');
+    //   if (cacheDataString != null) {
+    //     cacheDataApi = json.decode(cacheDataString);
+    //   }
+    // }
 
     // cuando se pide el detalle de una pelicula
     if (id != null) {
@@ -131,15 +139,15 @@ class Movies {
         Map jsonTrailerData = await makeRequest(url: 'movie/$id/videos');
         _setTrailer(jsonTrailerData);
       }
-      _setFavorite(); //verifica y setea
-      final SharedPreferences _preferences =
-          await SharedPreferences.getInstance();
-      await _preferences.setString('cacheDataApi', json.encode(cacheDataApi));
+      _setFavorite(cacheDataApi); //verifica y setea
+      // final SharedPreferences _preferences =
+      //     await SharedPreferences.getInstance();
+      // await _preferences.setString('cacheDataApi', json.encode(cacheDataApi));
       return this;
     }
 
     Map data;
-
+/*
     if (cacheDataApi['genres'] == null) {
       Map genresList = await makeRequest(url: 'genre/movie/list');
       if (genresList['hasError'] != null) {
@@ -150,7 +158,7 @@ class Movies {
           key: (e) => e['id'].toString(), value: (e) => e['name']);
       cacheDataApi['genres'] = genresList;
     }
-
+*/
     if (cacheDataApi[url] == null) {
       data = await makeRequest(page: page, url: url);
       cacheDataApi[url] = data;
@@ -158,31 +166,48 @@ class Movies {
       data = cacheDataApi[url];
     }
 
-    await _preferences.setString('cacheDataApi', json.encode(cacheDataApi));
+    // await _preferences.setString('cacheDataApi', json.encode(cacheDataApi));
 
-    List<Movies> list = List<Movies>.from(
-        data['results'].map((element) => Movies.fromJson(element)));
+    List<Movies> list = List<Movies>.from(data['results']
+        .map((element) => Movies.fromJson(element, cacheDataApi)));
     return list;
   }
 
-  Future<List<Movies>> lookByQuerry(String inputValue) async {
+  Future updateMovies(String url, Map cacheDataApi) async {
+    // cacheDataApi.forEach((key, value) {
+    //   if (key != "favorite") {
+    //     value = null;
+    //   }
+    // });
+    // cacheDataApi[url] = null;
+
+    return await getMovies(url: url, cacheDataApi: cacheDataApi);
+    // getMoviesPage('movie/popular');
+    // getMoviesPage('movie/top_rated');
+  }
+
+  Future<Map> getGenresList() async {
+    // if (cacheDataApi['genres'] == null) {
+    Map genresList = await makeRequest(url: 'genre/movie/list');
+    // if (genresList['hasError']) {
+    // return handleErrorWidget(genresList);
+    // }
+    genresList = Map.fromIterable(genresList['genres'],
+        key: (e) => e['id'].toString(), value: (e) => e['name']);
+    // cacheDataApi['genres'] = genresList;
+    return genresList;
+    // }
+  }
+
+  Future<List<Movies>> lookByQuerry(String inputValue, Map cacheDataApi) async {
     Map data;
-    if (cacheDataApi['genres'] == null) {
-      Map genresList = await makeRequest(url: 'genre/movie/list');
-      // if (genresList['hasError']) {
-      // return handleErrorWidget(genresList);
-      // }
-      genresList = Map.fromIterable(genresList['genres'],
-          key: (e) => e['id'].toString(), value: (e) => e['name']);
-      cacheDataApi['genres'] = genresList;
-    }
 
     data = await makeRequest(page: 1, url: 'search/movie', query: inputValue);
     if (data['hasError'] == true) {
       return [Movies()]; //x q?
     }
-    List<Movies> list = List<Movies>.from(
-        data['results'].map((element) => Movies.fromJson(element)));
+    List<Movies> list = List<Movies>.from(data['results']
+        .map((element) => Movies.fromJson(element, cacheDataApi)));
     return list;
   }
 
@@ -198,9 +223,9 @@ class Movies {
     return genderNames;
   }
 
-  getCacheDataApi() {
-    return cacheDataApi;
-  }
+  // getCacheDataApi() {
+  //   return cacheDataApi;
+  // }
 
   void _setActors(Map json) {
     var list = json['cast'].map((actor) {
@@ -212,24 +237,26 @@ class Movies {
     this.actors = List<Actors>.from(list);
   }
 
-  void toggleFavorite({String id}) async {
-    if (id == null) {
-      this.favorite = !favorite;
-    }
-    if (!cacheDataApi['favorite'].containsKey(this.id ?? id)) {
-      //{this.id: this}
-      // cacheDataApi['favorite'].addAll({this.id: this});
-      cacheDataApi['favorite'].addAll({this.id: _toJSONEncodable(this)});
-    } else {
-      cacheDataApi['favorite'].remove(this.id ?? id);
-    }
-    final SharedPreferences _preferences =
-        await SharedPreferences.getInstance();
-    await _preferences.setString('cacheDataApi', json.encode(cacheDataApi));
-    print('favoritos.lenght: ' + cacheDataApi['favorite'].length.toString());
-  }
+  // Map toggleFavorite({Map cacheDataApi, String id}) {
+  //   // if (id == null) {
+  //   this.favorite = !favorite;
+  //   // }
+  //   if (!cacheDataApi['favorite'].containsKey(this.id ?? id)) {
+  //     //{this.id: this}
+  //     // cacheDataApi['favorite'].addAll({this.id: this});
+  // cacheDataApi['favorite'].addAll({this.id: _toJSONEncodable(this)});
+  //   } else {
+  //     cacheDataApi['favorite'].remove(this.id ?? id);
+  //   }
+  //   // final SharedPreferences _preferences =
+  //   //     await SharedPreferences.getInstance();
+  //   // await _preferences.setString('cacheDataApi', json.encode(cacheDataApi));
+  //   print('favoritos.lenght: ' + cacheDataApi['favorite'].length.toString());
+  //   // return cacheDataApi['favorite'];
+  //   return cacheDataApi;
+  // }
 
-  Map _toJSONEncodable(Movies movie) {
+  Map toJSONEncodable(Movies movie) {
     Map<String, dynamic> map = {
       'title': movie.title,
       'description': movie.description,
@@ -247,7 +274,7 @@ class Movies {
     return map;
   }
 
-  void _setFavorite() {
+  void _setFavorite(Map cacheDataApi) {
     this.favorite = cacheDataApi['favorite'].containsKey(this.id);
   }
 
@@ -264,15 +291,15 @@ class Movies {
     }
   }
 
-  get getFavoriteMovies {
-    Map<String, dynamic> favorites = cacheDataApi['favorite'];
-    List<Movies> movies = [];
-    favorites.forEach((key, value) {
-      Movies movie = Movies.fromJson(value);
-      movies.add(movie);
-    });
-    return movies;
-  }
+  // get getFavoriteMovies{
+  //   Map<String, dynamic> favorites = cacheDataApi['favorite'];
+  //   List<Movies> movies = [];
+  //   favorites.forEach((key, value) {
+  //     Movies movie = Movies.fromJson(value);
+  //     movies.add(movie);
+  //   });
+  //   return movies;
+  // }
 }
 
 /////////////////////////////////////////
@@ -331,7 +358,9 @@ Widget createListView(List<Movies> movies, {String type}) {
           direction: DismissDirection.endToStart,
           onDismissed: (direction) {
             if (direction == DismissDirection.endToStart) {
-              Movies().toggleFavorite(id: movies[index].id);
+              Provider.of<CacheApp>(context, listen: false).toggleFavorite =
+                  movies[index];
+              // Movies().toggleFavorite(id: movies[index].id);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content:
@@ -349,7 +378,7 @@ Widget createListView(List<Movies> movies, {String type}) {
   );
 }
 
-List _setGenres(List genresList) {
+List _setGenres(List genresList, Map cacheDataApi) {
   List<String> genresListByName = List<String>.from(
     genresList.map((id) {
       return cacheDataApi['genres'][id.toString()];

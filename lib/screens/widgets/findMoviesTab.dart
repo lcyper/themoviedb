@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:themoviedb/class/Movies.dart';
+import 'package:themoviedb/provider/cacheApp.dart';
 
 class FindMoviesTab extends StatefulWidget {
   @override
@@ -17,6 +19,7 @@ class _FindMoviesTabState extends State<FindMoviesTab> {
 
   @override
   Widget build(BuildContext context) {
+    Map cacheDataApi = Provider.of<CacheApp>(context).cacheDataApi;
     return Padding(
       padding: const EdgeInsets.all(13.0),
       child: Column(
@@ -30,7 +33,7 @@ class _FindMoviesTabState extends State<FindMoviesTab> {
                 if (_controler.text.length >= 1) {
                   setState(() {
                     _indexNoDataYet = 1;
-                    _movieList = Movies().lookByQuerry(_controler.text);
+                    _movieList = Movies().lookByQuerry(_controler.text, cacheDataApi);
                   });
                 }
               },

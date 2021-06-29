@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:themoviedb/provider/cacheApp.dart';
 import 'package:themoviedb/screens/widgets/getMovies.dart';
 
 class MoviesTab extends StatefulWidget {
@@ -9,7 +11,14 @@ class MoviesTab extends StatefulWidget {
 class _MoviesTabState extends State<MoviesTab> {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
+    Map cacheDataApi = Provider.of<CacheApp>(context).cacheDataApi;
+    // if (cacheDataApi.length < 1) {
+    //   Provider.of<CacheApp>(context).setup();
+    // }
+
+    return cacheDataApi.length < 1 ?
+    Center(child: CircularProgressIndicator(),)
+    : DefaultTabController(
       initialIndex: 0,
       length: 2, //3
       child: Column(
@@ -23,8 +32,8 @@ class _MoviesTabState extends State<MoviesTab> {
               // physics: BouncingScrollPhysics(),
               children: [
                 // Icon(Icons.favorite_border),
-                getMoviesPage('movie/popular'),
-                getMoviesPage('movie/top_rated'),
+                getMoviesPage('movie/popular', cacheDataApi),
+                getMoviesPage('movie/top_rated', cacheDataApi),
               ],
             ),
           ),

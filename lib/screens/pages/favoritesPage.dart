@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:themoviedb/class/Movies.dart';
+import 'package:themoviedb/provider/cacheApp.dart';
 
 class FavoritesPage extends StatefulWidget {
   @override
@@ -9,7 +11,9 @@ class FavoritesPage extends StatefulWidget {
 class _FavoritesPageState extends State<FavoritesPage> {
   @override
   Widget build(BuildContext context) {
-    List<Movies> movies = Movies().getFavoriteMovies;
+    // cambiar y traer desde el provider
+    // List<Movies> movies = Movies().getFavoriteMovies;
+    List<Movies> movies = Provider.of<CacheApp>(context).favoriteMovies;
 
     return SafeArea(
       child: Scaffold(
