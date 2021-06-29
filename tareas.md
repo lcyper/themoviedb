@@ -12,6 +12,8 @@ tareas:
 
 #error cuando se borra un elemento de favoritos usando un Dismissible (problemas con el index del listview)
 
+#al tirar para abajo en la pantalla principal que se actualicen los datos (tambien cuando se entra a la app y tiene internet)
+
 #pagina detalle de la pelicula - popup del video de youtube
 
 #usar localstorage para guardar "CacheDataApi"?
