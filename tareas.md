@@ -3,6 +3,7 @@
 mi primera app
 inicio - 30/3/2021
 cumple requerimientos - 11/5/2021
+cumple requisitos con provider - 28/6/2021
 fininalizada - 
 
 tareas:
