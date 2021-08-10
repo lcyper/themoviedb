@@ -9,7 +9,7 @@ Widget getMoviesPage(String url, Map cacheDataApi) => FutureBuilder(
           ? RefreshIndicator(
               onRefresh: () {
                 // return Movies().updateMovies(url, cacheDataApi);
-
+                return;
               },
               child: createListView(snapshot.data))
           : snapshot.hasError
