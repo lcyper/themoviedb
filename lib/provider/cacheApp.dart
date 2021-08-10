@@ -17,17 +17,17 @@ class CacheApp with ChangeNotifier {
 
   void setup() async {
     _preferences = await SharedPreferences.getInstance();
-    var cacheDataString = _preferences.getString('cacheDataApi') ?? "{}";
-    if (!await isInternet()) {
-      print("sin internet, usando SharedPreferences");
-      if (cacheDataString != null) {
-        _cacheDataApi = json.decode(cacheDataString);
-      } else {
-        _cacheDataApi['favorite'] = {};
-      }
-    } else if (_cacheDataApi['favorite'] == null) {
-      _cacheDataApi['favorite'] = {};
-      // json.decode(cacheDataString)['favorite'] ?? {};
+    String cacheDataString = _preferences.getString('cacheDataApi');
+    _cacheDataApi = json.decode(cacheDataString ?? "{}");
+    _cacheDataApi['favorite'] ??= {};
+    if (await isInternet()) {
+      print('con internet');
+      _cacheDataApi = _cacheDataApi.map((key, value) {
+        if (key == 'favorite') {
+          return MapEntry(key, value);
+        }
+        return MapEntry("","");
+      });
     }
     if (_cacheDataApi['genres'] == null) {
       _cacheDataApi['genres'] = await Movies().getGenresList();
