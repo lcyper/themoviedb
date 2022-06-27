@@ -31,13 +31,6 @@ class _MovieInfoState extends State<MovieInfo> {
       future: widget.movie
           .getMovies(id: widget.movie.id, cacheDataApi: cacheDataApi),
       builder: (context, snapshot) {
-        // final _controller = YoutubePlayerController(
-        //   initialVideoId: widget.movie.trailerId,
-        //   flags: YoutubePlayerFlags(
-        //     useHybridComposition: true,
-        //   ),
-        // );
-
         Widget _actors() => widget.movie.actors.length >= 1
             ? Column(
                 children: [
@@ -102,61 +95,78 @@ class _MovieInfoState extends State<MovieInfo> {
               )
             : Container();
 
-        Widget _trailerAndFavorite() => Row(
-              // direction: Axis.horizontal,
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: widget.movie.trailerId != null
-                  ? MainAxisAlignment.spaceEvenly
-                  : MainAxisAlignment.center,
-              // mainAxisSize: MainAxisSize.max,
-              children: [
-                widget.movie.trailerId != null
-                    ? TextButton(
-                        child: Text('Ver Trailer'),
-                        // child: Text(widget.movie.trailerId),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                  // content: YoutubePlayer(
-                                  //   controller: _controller,
-                                  //   onReady: () {
-                                  //     print('Player is ready.');
-                                  //   },
-                                  // ),
-                                  );
-                            },
-                          );
-                        },
-                      )
-                    : Container(),
-                IconButton(
-                  onPressed: () => setState(() {
-                    List<String> message = [
-                      "Se a agregado a Favoritos",
-                      "Se a eliminado de Favoritos"
-                    ];
-                    Provider.of<CacheApp>(context, listen: false)
-                        .toggleFavorite = widget.movie;
+        Widget _trailerAndFavorite() {
+          // final _controller = YoutubePlayerController(
+          //   initialVideoId: widget.movie.trailerId,
+          //   flags: YoutubePlayerFlags(
+          //     useHybridComposition: true,
+          //     //   autoPlay: true,
+          //     //   mute: true,
+          //   ),
+          // );
+          return Row(
+            // direction: Axis.horizontal,
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: widget.movie.trailerId != null
+                ? MainAxisAlignment.spaceEvenly
+                : MainAxisAlignment.center,
+            // mainAxisSize: MainAxisSize.max,
+            children: [
+              widget.movie.trailerId != null
+                  ? TextButton(
+                      child: Text('Ver Trailer'),
+                      // child: Text(widget.movie.trailerId),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              insetPadding: EdgeInsets.zero,
+                              // content: YoutubePlayer(
+                              //   controller: _controller,
+                              //   showVideoProgressIndicator: true,
+                              //   progressIndicatorColor: Colors.amber,
+                              //   // progressColors: ProgressColors(
+                              //   //     playedColor: Colors.amber,
+                              //   //     handleColor: Colors.amberAccent,
+                              //   // ),
+                              //   onReady: () {
+                              //     // _controller.addListener(listener);
+                              //   },
+                              // ),
+                            );
+                          },
+                        );
+                      },
+                    )
+                  : Container(),
+              IconButton(
+                onPressed: () => setState(() {
+                  List<String> message = [
+                    "Se a agregado a Favoritos",
+                    "Se a eliminado de Favoritos"
+                  ];
+                  Provider.of<CacheApp>(context, listen: false).toggleFavorite =
+                      widget.movie;
 
-                    // toggleFavorite = widget.movie;
-                    // widget.movie.toggleFavorite();
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content:
-                          Text(message[widget.movie.favorite == true ? 0 : 1]),
-                      duration: Duration(seconds: 2),
-                    ));
-                  }),
-                  icon: widget.movie.favorite
-                      ? Icon(
-                          Icons.favorite,
-                          color: Colors.red,
-                        )
-                      : Icon(Icons.favorite_border),
-                )
-              ],
-            );
+                  // toggleFavorite = widget.movie;
+                  // widget.movie.toggleFavorite();
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content:
+                        Text(message[widget.movie.favorite == true ? 0 : 1]),
+                    duration: Duration(seconds: 2),
+                  ));
+                }),
+                icon: widget.movie.favorite
+                    ? Icon(
+                        Icons.favorite,
+                        color: Colors.red,
+                      )
+                    : Icon(Icons.favorite_border),
+              )
+            ],
+          );
+        }
 
         return snapshot.hasData
             ? Column(
